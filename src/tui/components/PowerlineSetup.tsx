@@ -24,7 +24,7 @@ type Screen = 'menu' | PowerlineMenuValue;
 function formatPowerlineMenuLabel(label: string): string {
     // 中文字符占 2 个终端宽度，计算实际显示宽度后用空格补齐
     const segmenter = new Intl.Segmenter();
-    const displayWidth = Array.from(segmenter.segment(label)).reduce((w, { segment: ch }) => w + (ch.codePointAt(0)! > 0x7F ? 2 : 1), 0);
+    const displayWidth = Array.from(segmenter.segment(label)).reduce((w, { segment: ch }) => w + ((ch.codePointAt(0) ?? 0) > 0x7F ? 2 : 1), 0);
     const targetWidth = 10;
     const padCount = Math.max(0, targetWidth - displayWidth);
     return label + ' '.repeat(padCount);
