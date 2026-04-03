@@ -1,0 +1,358 @@
+# ccstatusline-zh
+
+**🎨 Claude Code CLI 高度可定制状态栏格式化工具 — 中文汉化版**
+
+_在终端中显示模型信息、Git 分支、Token 用量及其他实时指标_
+
+> 本项目是 [ccstatusline](https://github.com/sirmalloc/ccstatusline) 的**中文汉化 Fork**，基于 v2.2.7 版本。所有用户可见的界面文本（组件名称、分类、描述、菜单标签、提示信息等）均已翻译为中文，方便中文用户使用。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/huangguang1999/ccstatusline-zh/blob/main/LICENSE)
+[![Node.js Version](https://img.shields.io/node/v/ccstatusline.svg)](https://nodejs.org)
+
+![Demo](https://raw.githubusercontent.com/huangguang1999/ccstatusline-zh/main/screenshots/demo.gif)
+
+## 📚 目录
+
+- [关于本项目](#-关于本项目)
+- [功能特性](#-功能特性)
+- [快速开始](#-快速开始)
+- [Windows 支持](#-windows-支持)
+- [使用方法](#-使用方法)
+- [可用组件](#-可用组件)
+- [配置界面（TUI）](#-配置界面tui)
+- [API 文档](#-api-文档)
+- [开发指南](#️-开发指南)
+- [致谢](#-致谢)
+- [许可证](#-许可证)
+
+---
+
+## 🌏 关于本项目
+
+**ccstatusline-zh** 是 [ccstatusline](https://github.com/sirmalloc/ccstatusline) 的中文汉化版本。
+
+ccstatusline 是一个优秀的 Claude Code CLI 状态栏格式化工具，支持 35+ 种可定制组件、Powerline 主题、交互式 TUI 配置界面等丰富功能。本项目在其基础上，将所有用户可见的英文文本直接替换为中文，包括：
+
+- **38 个组件**的名称、描述、分类标签
+- **TUI 配置界面**的全部菜单项、帮助文本、提示信息、对话框
+- **布局组件**（分隔符、弹性分隔符）的名称和描述
+- **确认对话框** "是 / 否"
+- **分类筛选** "全部" 等界面元素
+
+内部标识符（如 settings.json 中的 widget type ID `"model"`、`"git-branch"` 等）保持英文不变，确保与上游版本的配置文件完全兼容。
+
+### 与上游的差异
+
+| 项目       | ccstatusline | ccstatusline-zh           |
+| ---------- | ------------ | ------------------------- |
+| 界面语言   | 英文         | 中文                      |
+| 配置兼容性 | —            | ✅ 共用相同 settings.json |
+| 功能差异   | —            | 无，功能完全一致          |
+| 基于版本   | 最新         | v2.2.7                    |
+
+---
+
+## ✨ 功能特性
+
+- **35+ 种可定制组件** — 模型、Git、Token、上下文、会话、费用、速度等
+- **交互式 TUI 配置** — 按 `ccstatusline-zh setup` 启动可视化配置界面
+- **Powerline 风格** — 内置多款 Powerline 主题，支持自定义分隔符
+- **多行布局** — 支持多行状态栏配置
+- **实时预览** — 配置时即时预览效果
+- **自定义颜色** — 每个组件支持独立的前景色和背景色设置
+- **自定义命令 & 文本** — 可嵌入自定义 Shell 命令输出或静态文本
+- **可点击链接** — 支持 OSC8 终端超链接
+- **跨平台** — 支持 macOS、Linux、Windows
+
+---
+
+## 🚀 快速开始
+
+### 安装
+
+通过 npm 全局安装：
+
+```bash
+npm install -g ccstatusline-zh
+```
+
+或者使用 Bun：
+
+```bash
+bun install -g ccstatusline-zh
+```
+
+### 配置 Claude Code
+
+在 Claude Code 设置中添加状态栏 Hook。编辑 `~/.claude/settings.json`：
+
+```json
+{
+  "hooks": {
+    "StatusLine": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccstatusline-zh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 启动配置界面
+
+```bash
+ccstatusline-zh setup
+```
+
+这将打开交互式 TUI 配置界面，你可以：
+
+- 添加、删除、重新排列组件
+- 设置颜色和样式
+- 选择 Powerline 主题
+- 实时预览状态栏效果
+
+---
+
+## 🪟 Windows 支持
+
+ccstatusline-zh 完整支持 Windows 系统。安装方式相同：
+
+```bash
+npm install -g ccstatusline-zh
+```
+
+Windows 下 Claude Code 的 Hook 配置路径为 `%USERPROFILE%\.claude\settings.json`。
+
+---
+
+## 📖 使用方法
+
+### 基本用法
+
+安装并配置 Hook 后，ccstatusline-zh 会在每次 Claude Code 更新状态时自动运行。状态数据通过 stdin 以 JSON 格式传入。
+
+### 手动测试
+
+```bash
+cat scripts/payload.example.json | ccstatusline-zh
+```
+
+### 自定义配置文件路径
+
+```bash
+ccstatusline-zh --config /path/to/custom-settings.json
+```
+
+### 命令行参数
+
+| 参数              | 说明                    |
+| ----------------- | ----------------------- |
+| `setup`           | 启动交互式 TUI 配置界面 |
+| `--config <path>` | 指定自定义配置文件路径  |
+| `--version`       | 显示版本号              |
+
+---
+
+## 🧩 可用组件
+
+### 核心
+
+| 组件     | 说明                        |
+| -------- | --------------------------- |
+| 模型     | 显示当前 Claude 模型名称    |
+| 风格     | 显示当前输出风格            |
+| 版本     | 显示 ccstatusline-zh 版本号 |
+| 思考力度 | 显示当前思考力度等级        |
+| Vim 模式 | 显示当前 Vim 模式           |
+
+### Git
+
+| 组件       | 说明                                  |
+| ---------- | ------------------------------------- |
+| Git 分支   | 显示当前 Git 分支名，支持 GitHub 链接 |
+| Git 变更   | 显示未提交的文件变更统计              |
+| Git 新增   | 显示未提交的新增行数                  |
+| Git 删除   | 显示未提交的删除行数                  |
+| Git 根目录 | 显示 Git 仓库根目录名                 |
+| Git 工作树 | 显示 Git 工作树信息                   |
+
+### Token
+
+| 组件       | 说明                |
+| ---------- | ------------------- |
+| 输入 Token | 显示输入 Token 数量 |
+| 输出 Token | 显示输出 Token 数量 |
+| 缓存 Token | 显示缓存 Token 数量 |
+| 总 Token   | 显示 Token 合计     |
+
+### Token 速度
+
+| 组件     | 说明                        |
+| -------- | --------------------------- |
+| 输入速度 | 显示输入 Token 速度 (tok/s) |
+| 输出速度 | 显示输出 Token 速度 (tok/s) |
+| 总速度   | 显示总 Token 速度 (tok/s)   |
+
+### 上下文
+
+| 组件             | 说明                       |
+| ---------------- | -------------------------- |
+| 上下文长度       | 显示当前上下文 Token 数    |
+| 上下文 %         | 显示上下文使用百分比       |
+| 上下文 %（可用） | 显示可用上下文百分比       |
+| 上下文进度条     | 以进度条形式显示上下文用量 |
+
+### 会话
+
+| 组件           | 说明                          |
+| -------------- | ----------------------------- |
+| 会话时钟       | 显示当前会话持续时间          |
+| 会话费用       | 显示当前会话预估费用          |
+| 会话名称       | 显示 Claude Code 会话名称     |
+| 会话用量       | 显示会话 API 用量             |
+| 周用量         | 显示本周 API 用量             |
+| 时段计时器     | 显示当前 5 小时时段已用时间   |
+| 时段重置计时   | 显示时段重置窗口剩余时间      |
+| 周重置计时     | 显示周重置剩余时间            |
+| Claude 会话 ID | 显示当前 Claude 会话 ID       |
+| 技能           | 显示 Claude Code 技能调用信息 |
+
+### 环境
+
+| 组件     | 说明                 |
+| -------- | -------------------- |
+| 当前目录 | 显示当前工作目录     |
+| 终端宽度 | 显示终端列数         |
+| 内存用量 | 显示系统内存使用情况 |
+
+### 自定义
+
+| 组件       | 说明                      |
+| ---------- | ------------------------- |
+| 自定义文本 | 显示用户自定义文本        |
+| 自定义命令 | 执行 Shell 命令并显示输出 |
+| 链接       | 显示可点击的终端超链接    |
+
+### 布局
+
+| 组件       | 说明                         |
+| ---------- | ---------------------------- |
+| 分隔符     | 组件之间的固定分隔符         |
+| 弹性分隔符 | 自动填充剩余空间的弹性分隔符 |
+
+---
+
+## 🖥️ 配置界面（TUI）
+
+运行 `ccstatusline-zh setup` 打开交互式配置界面。
+
+### 主菜单功能
+
+- **编辑状态栏** — 添加、删除、移动、配置组件
+- **Powerline 设置** — 选择主题和自定义分隔符
+- **全局样式覆盖** — 设置全局颜色和样式
+- **终端选项** — 配置终端宽度和颜色级别
+- **安装/更新** — 选择包管理器进行安装
+- **导出配置** — 导出当前配置
+- **重置配置** — 恢复默认设置
+
+### 快捷键
+
+| 按键    | 功能      |
+| ------- | --------- |
+| `↑` `↓` | 导航      |
+| `Enter` | 选择/确认 |
+| `a`     | 添加组件  |
+| `d`     | 删除组件  |
+| `e`     | 编辑组件  |
+| `w`     | 组件选项  |
+| `/`     | 搜索      |
+| `q`     | 退出      |
+
+---
+
+## 📡 API 文档
+
+详细的 API 文档和 JSON Payload 格式说明请参考上游项目：
+
+👉 [ccstatusline API Documentation](https://github.com/sirmalloc/ccstatusline#-api-documentation)
+
+---
+
+## 🛠️ 开发指南
+
+### 环境要求
+
+- [Bun](https://bun.sh/) >= 1.0
+- Node.js >= 14.0.0
+
+### 本地开发
+
+```bash
+# 克隆仓库
+git clone https://github.com/huangguang1999/ccstatusline-zh.git
+cd ccstatusline-zh
+
+# 安装依赖
+bun install
+
+# 运行示例
+bun run example
+
+# 启动 TUI
+bun run start setup
+
+# 构建
+bun run build
+
+# 代码检查
+bun run lint
+```
+
+### 项目结构
+
+```
+src/
+├── ccstatusline.ts          # 入口文件
+├── widgets/                 # 组件目录（38 个组件）
+│   ├── Model.ts
+│   ├── GitBranch.ts
+│   ├── TokensInput.ts
+│   ├── shared/              # 共享工具函数
+│   └── ...
+├── tui/                     # TUI 配置界面
+│   ├── App.tsx
+│   └── components/          # 界面组件
+├── utils/                   # 工具函数
+└── types/                   # 类型定义
+```
+
+---
+
+## 🙏 致谢
+
+- [ccstatusline](https://github.com/sirmalloc/ccstatusline) — 原始项目，由 [sirmalloc](https://github.com/sirmalloc) 开发维护
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — Anthropic 的 CLI 编码助手
+- [Ink](https://github.com/vadimdemedes/ink) — React 终端渲染框架
+
+---
+
+## 📄 许可证
+
+本项目遵循 [MIT 许可证](LICENSE)，与上游项目保持一致。
+
+---
+
+<div align="center">
+
+**如果这个汉化版对你有帮助，欢迎 ⭐ Star！**
+
+[上游项目](https://github.com/sirmalloc/ccstatusline) · [问题反馈](https://github.com/huangguang1999/ccstatusline-zh/issues)
+
+</div>
