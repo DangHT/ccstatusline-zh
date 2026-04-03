@@ -50,14 +50,8 @@ describe('PowerlineSetup helpers', () => {
             sublabel: '(多个)',
             disabled: false
         });
-        expect(enabledItems[1]).toMatchObject({
-            sublabel: '(无)'
-        });
-        expect(enabledItems[2]).toMatchObject({
-            sublabel: '(斜线)'
-        });
-        expect(enabledItems[3]).toMatchObject({
-            sublabel: '(自定义)'
-        });
+        expect(enabledItems[1]).toMatchObject({ sublabel: '(无)' });
+        expect(enabledItems[2]).toMatchObject({ sublabel: '(斜线)' });
+        expect(enabledItems[3]).toMatchObject({ sublabel: '(自定义)' });
     });
 });
