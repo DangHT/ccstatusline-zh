@@ -84,22 +84,26 @@ bun install -g ccstatusline-zh
 
 ### 配置 Claude Code
 
-在 Claude Code 设置中添加状态栏 Hook。编辑 `~/.claude/settings.json`：
+在 Claude Code 设置中添加状态栏配置。编辑 `~/.claude/settings.json`：
 
 ```json
 {
-  "hooks": {
-    "StatusLine": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccstatusline-zh"
-          }
-        ]
-      }
-    ]
+  "statusLine": {
+    "type": "command",
+    "command": "ccstatusline-zh",
+    "padding": 0
+  }
+}
+```
+
+如果使用 `npx` 或 `bunx` 运行，可以使用以下命令：
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y ccstatusline-zh@latest",
+    "padding": 0
   }
 }
 ```
@@ -127,7 +131,7 @@ ccstatusline-zh 完整支持 Windows 系统。安装方式相同：
 npm install -g ccstatusline-zh
 ```
 
-Windows 下 Claude Code 的 Hook 配置路径为 `%USERPROFILE%\.claude\settings.json`。
+Windows 下 Claude Code 的配置路径为 `%USERPROFILE%\.claude\settings.json`。
 
 ---
 
@@ -135,7 +139,7 @@ Windows 下 Claude Code 的 Hook 配置路径为 `%USERPROFILE%\.claude\settings
 
 ### 基本用法
 
-安装并配置 Hook 后，ccstatusline-zh 会在每次 Claude Code 更新状态时自动运行。状态数据通过 stdin 以 JSON 格式传入。
+安装并配置 statusLine 后，ccstatusline-zh 会在每次 Claude Code 更新状态时自动运行。状态数据通过 stdin 以 JSON 格式传入。
 
 ### 手动测试
 
