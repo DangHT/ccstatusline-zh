@@ -21,8 +21,8 @@ import { formatRawOrLabeledValue } from './shared/raw-or-labeled';
 
 export class ContextPercentageUsableWidget implements Widget {
     getDefaultColor(): string { return 'green'; }
-    getDescription(): string { return '显示可用上下文窗口已用或剩余百分比（自动压缩前最大值的 80%）'; }
-    getDisplayName(): string { return '上下文 %（可用）'; }
+    getDescription(): string { return '显示有效上下文窗口已用或剩余百分比（自动压缩前最大值的 80%）'; }
+    getDisplayName(): string { return '上下文 %（有效）'; }
     getCategory(): string { return '上下文'; }
     getEditorDisplay(item: WidgetItem): WidgetEditorDisplay {
         return {
@@ -37,25 +37,26 @@ export class ContextPercentageUsableWidget implements Widget {
 
     render(item: WidgetItem, context: RenderContext, settings: Settings): string | null {
         const isInverse = isContextInverse(item);
+        const label = isInverse ? '剩余: ' : '已用: ';
         const modelIdentifier = getModelContextIdentifier(context.data?.model);
         const contextWindowMetrics = getContextWindowMetrics(context.data);
         const contextConfig = getContextConfig(modelIdentifier, contextWindowMetrics.windowSize);
 
         if (context.isPreview) {
             const previewValue = isInverse ? '88.4%' : '11.6%';
-            return formatRawOrLabeledValue(item, '可用: ', previewValue);
+            return formatRawOrLabeledValue(item, label, previewValue);
         }
 
         if (contextWindowMetrics.contextLengthTokens !== null) {
             const usedPercentage = Math.min(100, (contextWindowMetrics.contextLengthTokens / contextConfig.usableTokens) * 100);
             const displayPercentage = isInverse ? (100 - usedPercentage) : usedPercentage;
-            return formatRawOrLabeledValue(item, '可用: ', `${displayPercentage.toFixed(1)}%`);
+            return formatRawOrLabeledValue(item, label, `${displayPercentage.toFixed(1)}%`);
         }
 
         if (context.tokenMetrics) {
             const usedPercentage = Math.min(100, (context.tokenMetrics.contextLength / contextConfig.usableTokens) * 100);
             const displayPercentage = isInverse ? (100 - usedPercentage) : usedPercentage;
-            return formatRawOrLabeledValue(item, '可用: ', `${displayPercentage.toFixed(1)}%`);
+            return formatRawOrLabeledValue(item, label, `${displayPercentage.toFixed(1)}%`);
         }
         return null;
     }

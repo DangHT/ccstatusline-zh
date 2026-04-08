@@ -287,10 +287,12 @@ export const ItemsEditor: React.FC<ItemsEditorProps> = ({ widgets, onUpdate, onB
     if (canMerge) {
         helpText += ', (m)合并';
     }
-    helpText += ', ESC 返回';
-
-    // Build custom keybinds text
+    // Append custom keybinds before ESC
     const customKeybindsText = customKeybinds.map(kb => kb.label).join(', ');
+    if (customKeybindsText) {
+        helpText += `, ${customKeybindsText}`;
+    }
+    helpText += ', ESC 返回';
     const pickerActionLabel = widgetPicker?.action === 'add'
         ? '添加组件'
         : widgetPicker?.action === 'insert'
@@ -401,7 +403,6 @@ export const ItemsEditor: React.FC<ItemsEditorProps> = ({ widgets, onUpdate, onB
             ) : (
                 <Box flexDirection='column'>
                     <Text dimColor>{helpText}</Text>
-                    <Text dimColor>{customKeybindsText || ' '}</Text>
                 </Box>
             )}
             {hasFlexSeparator && !widthDetectionAvailable && (

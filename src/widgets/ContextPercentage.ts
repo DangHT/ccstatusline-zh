@@ -37,16 +37,17 @@ export class ContextPercentageWidget implements Widget {
 
     render(item: WidgetItem, context: RenderContext, settings: Settings): string | null {
         const isInverse = isContextInverse(item);
+        const label = isInverse ? '剩余: ' : '已用: ';
         const contextWindowMetrics = getContextWindowMetrics(context.data);
 
         if (context.isPreview) {
             const previewValue = isInverse ? '90.7%' : '9.3%';
-            return formatRawOrLabeledValue(item, '上下文: ', previewValue);
+            return formatRawOrLabeledValue(item, label, previewValue);
         }
 
         if (contextWindowMetrics.usedPercentage !== null) {
             const displayPercentage = isInverse ? (100 - contextWindowMetrics.usedPercentage) : contextWindowMetrics.usedPercentage;
-            return formatRawOrLabeledValue(item, '上下文: ', `${displayPercentage.toFixed(1)}%`);
+            return formatRawOrLabeledValue(item, label, `${displayPercentage.toFixed(1)}%`);
         }
 
         if (context.tokenMetrics) {
@@ -54,7 +55,7 @@ export class ContextPercentageWidget implements Widget {
             const contextConfig = getContextConfig(modelIdentifier, contextWindowMetrics.windowSize);
             const usedPercentage = Math.min(100, (context.tokenMetrics.contextLength / contextConfig.maxTokens) * 100);
             const displayPercentage = isInverse ? (100 - usedPercentage) : usedPercentage;
-            return formatRawOrLabeledValue(item, '上下文: ', `${displayPercentage.toFixed(1)}%`);
+            return formatRawOrLabeledValue(item, label, `${displayPercentage.toFixed(1)}%`);
         }
 
         return null;
