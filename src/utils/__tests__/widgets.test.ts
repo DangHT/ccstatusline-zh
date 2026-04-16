@@ -12,6 +12,7 @@ import type { WidgetItemType } from '../../types/Widget';
 import {
     filterWidgetCatalog,
     getAllWidgetTypes,
+    getMatchSegments,
     getWidget,
     getWidgetCatalog,
     getWidgetCatalogCategories,
@@ -147,6 +148,63 @@ describe('widget catalog filtering', () => {
         expect(results).toHaveLength(0);
     });
 
+    it('fuzzy-matches initials across word boundaries (gb → Git Branch)', () => {
+        const fuzzyCatalog: WidgetCatalogEntry[] = [
+            { type: 'git-branch' as WidgetItemType, displayName: 'Git Branch', description: '', category: 'Git', searchText: 'git branch git-branch' },
+            { type: 'git-deletions' as WidgetItemType, displayName: 'Git Deletions', description: '', category: 'Git', searchText: 'git deletions git-deletions' }
+        ];
+        const results = filterWidgetCatalog(fuzzyCatalog, '全部', 'gb');
+        expect(results[0]?.type).toBe('git-branch');
+    });
+
+    it('prioritizes display-name fuzzy matches over description substring hits', () => {
+        const fuzzyCatalog: WidgetCatalogEntry[] = [
+            { type: 'terminal-width' as WidgetItemType, displayName: 'Terminal Width', description: '', category: 'Env', searchText: 'terminal width terminal-width' },
+            { type: 'other' as WidgetItemType, displayName: 'Other', description: 'something with tw inside', category: 'Env', searchText: 'other something with tw inside' }
+        ];
+        const results = filterWidgetCatalog(fuzzyCatalog, '全部', 'tw');
+        expect(results[0]?.type).toBe('terminal-width');
+    });
+
+    it('prioritizes word-initial fuzzy matches over incidental subsequence matches', () => {
+        const fuzzyCatalog: WidgetCatalogEntry[] = [
+            { type: 'tokens-cached' as WidgetItemType, displayName: 'Tokens Cached', description: '', category: 'Token', searchText: 'tokens cached tokens-cached' },
+            { type: 'tokens-input' as WidgetItemType, displayName: 'Tokens Input', description: '', category: 'Token', searchText: 'tokens input tokens-input' },
+            { type: 'tokens-output' as WidgetItemType, displayName: 'Tokens Output', description: '', category: 'Token', searchText: 'tokens output tokens-output' },
+            { type: 'tokens-total' as WidgetItemType, displayName: 'Tokens Total', description: '', category: 'Token', searchText: 'tokens total tokens-total' }
+        ];
+        expect(filterWidgetCatalog(fuzzyCatalog, '全部', 'tc')[0]?.type).toBe('tokens-cached');
+        expect(filterWidgetCatalog(fuzzyCatalog, '全部', 'ti')[0]?.type).toBe('tokens-input');
+        expect(filterWidgetCatalog(fuzzyCatalog, '全部', 'to')[0]?.type).toBe('tokens-output');
+    });
+
+    it('ranks exact substring matches above fuzzy matches', () => {
+        const rankingCatalog: WidgetCatalogEntry[] = [
+            {
+                type: 'exact-match' as WidgetItemType,
+                displayName: 'Git Branch',
+                description: 'Exact substring match',
+                category: 'Core',
+                searchText: 'git branch exact substring match exact-match'
+            },
+            {
+                type: 'fuzzy-match' as WidgetItemType,
+                displayName: 'Global Input Timer',
+                description: 'Fuzzy-only match',
+                category: 'Core',
+                searchText: 'global input timer fuzzy-only match fuzzy-match'
+            }
+        ];
+
+        const results = filterWidgetCatalog(rankingCatalog, '全部', 'git');
+        expect(results.map(entry => entry.type)).toEqual(['exact-match', 'fuzzy-match']);
+    });
+
+    it('returns no results when query chars cannot form a subsequence in any entry', () => {
+        const results = filterWidgetCatalog(catalog, '全部', 'zzz');
+        expect(results).toHaveLength(0);
+    });
+
     it('prioritizes name match before type and description matches', () => {
         const rankingCatalog: WidgetCatalogEntry[] = [
             {
@@ -174,5 +232,52 @@ describe('widget catalog filtering', () => {
 
         const results = filterWidgetCatalog(rankingCatalog, '全部', 'git');
         expect(results.map(entry => entry.type)).toEqual(['alpha', 'git-type-only', 'desc-only']);
+    });
+});
+
+describe('getMatchSegments', () => {
+    it('returns single unmatched segment when query is empty', () => {
+        expect(getMatchSegments('Git Branch', '')).toEqual([{ text: 'Git Branch', matched: false }]);
+    });
+
+    it('highlights exact substring match', () => {
+        const segments = getMatchSegments('Git Branch', 'git');
+        expect(segments).toEqual([
+            { text: 'Git', matched: true },
+            { text: ' Branch', matched: false }
+        ]);
+    });
+
+    it('highlights exact substring in the middle', () => {
+        const segments = getMatchSegments('Git Branch', 'it B');
+        expect(segments).toEqual([
+            { text: 'G', matched: false },
+            { text: 'it B', matched: true },
+            { text: 'ranch', matched: false }
+        ]);
+    });
+
+    it('highlights fuzzy match positions when no substring match exists', () => {
+        const segments = getMatchSegments('Git Branch', 'gb');
+        const matched = segments.filter(s => s.matched).map(s => s.text).join('');
+        expect(matched.toLowerCase()).toBe('gb');
+    });
+
+    it('prefers word-initial fuzzy positions over incidental interior-letter matches', () => {
+        expect(getMatchSegments('Tokens Output', 'to')).toEqual([
+            { text: 'T', matched: true },
+            { text: 'okens ', matched: false },
+            { text: 'O', matched: true },
+            { text: 'utput', matched: false }
+        ]);
+    });
+
+    it('returns unmatched segment when query chars cannot form a subsequence', () => {
+        expect(getMatchSegments('Git Branch', 'zzz')).toEqual([{ text: 'Git Branch', matched: false }]);
+    });
+
+    it('is case-insensitive but preserves original casing in output', () => {
+        const segments = getMatchSegments('Git Branch', 'GIT');
+        expect(segments[0]).toEqual({ text: 'Git', matched: true });
     });
 });

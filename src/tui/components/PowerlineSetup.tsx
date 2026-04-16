@@ -214,6 +214,14 @@ export const PowerlineSetup: React.FC<PowerlineSetupProps> = ({
                         autoAlign: !powerlineConfig.autoAlign
                     }
                 });
+            } else if ((input === 'c' || input === 'C') && powerlineConfig.enabled) {
+                onUpdate({
+                    ...settings,
+                    powerline: {
+                        ...powerlineConfig,
+                        continueThemeAcrossLines: !powerlineConfig.continueThemeAcrossLines
+                    }
+                });
             }
         }
     });
@@ -408,9 +416,20 @@ export const PowerlineSetup: React.FC<PowerlineSetupProps> = ({
                                 <Text dimColor> - 按 (a) 切换</Text>
                             </Box>
 
+                            <Box>
+                                <Text> 主题色延续: </Text>
+                                <Text color={powerlineConfig.continueThemeAcrossLines ? 'green' : 'red'}>
+                                    {powerlineConfig.continueThemeAcrossLines ? '✓ 已启用  ' : '✗ 已禁用 '}
+                                </Text>
+                                <Text dimColor> - 按 (c) 切换</Text>
+                            </Box>
+
                             <Box flexDirection='column' marginTop={1}>
                                 <Text dimColor>
                                     启用后，全局覆盖将被禁用，并使用 Powerline 分隔符
+                                </Text>
+                                <Text dimColor>
+                                    主题色延续：Powerline 颜色序列跨多行状态栏连续延续
                                 </Text>
                             </Box>
                         </>

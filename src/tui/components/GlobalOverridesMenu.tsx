@@ -29,6 +29,7 @@ export const GlobalOverridesMenu: React.FC<GlobalOverridesMenuProps> = ({ settin
     const [separatorInput, setSeparatorInput] = useState(settings.defaultSeparator ?? '');
     const [inheritColors, setInheritColors] = useState(settings.inheritSeparatorColors);
     const [globalBold, setGlobalBold] = useState(settings.globalBold);
+    const [minimalistMode, setMinimalistMode] = useState(settings.minimalistMode);
     const isPowerlineEnabled = settings.powerline.enabled;
 
     // Check if there are any manual separators in the current configuration
@@ -133,6 +134,15 @@ export const GlobalOverridesMenu: React.FC<GlobalOverridesMenuProps> = ({ settin
                     globalBold: newGlobalBold
                 };
                 onUpdate(updatedSettings);
+            } else if (input === 'm' || input === 'M') {
+                // Toggle minimalist mode
+                const newMinimalistMode = !minimalistMode;
+                setMinimalistMode(newMinimalistMode);
+                const updatedSettings = {
+                    ...settings,
+                    minimalistMode: newMinimalistMode
+                };
+                onUpdate(updatedSettings);
             } else if (input === 'f' || input === 'F') {
                 // Cycle through foreground colors
                 const nextIndex = (currentFgIndex + 1) % fgColors.length;
@@ -223,6 +233,12 @@ export const GlobalOverridesMenu: React.FC<GlobalOverridesMenuProps> = ({ settin
                     </Box>
 
                     <Box>
+                        <Text>极简模式: </Text>
+                        <Text color={minimalistMode ? 'green' : 'red'}>{minimalistMode ? '✓ 已启用' : '✗ 已禁用'}</Text>
+                        <Text dimColor> - 按 (m) 切换</Text>
+                    </Box>
+
+                    <Box>
                         <Text>  默认内边距: </Text>
                         <Text color='cyan'>{settings.defaultPadding ? `"${settings.defaultPadding}"` : '（无）'}</Text>
                         <Text dimColor> - 按 (p) 编辑</Text>
@@ -303,6 +319,9 @@ export const GlobalOverridesMenu: React.FC<GlobalOverridesMenuProps> = ({ settin
                         </Text>
                         <Text dimColor wrap='wrap'>
                             • 全局加粗：无论单个设置如何，所有文本都会加粗
+                        </Text>
+                        <Text dimColor wrap='wrap'>
+                            • 极简模式：去除组件的装饰性前缀和标签
                         </Text>
                         <Text dimColor wrap='wrap'>
                             • 覆盖颜色：所有组件将使用这些颜色而非其配置的颜色

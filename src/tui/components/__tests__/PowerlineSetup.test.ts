@@ -1,18 +1,74 @@
+import { render } from 'ink';
+import { PassThrough } from 'node:stream';
+import React from 'react';
 import {
+    afterEach,
     describe,
     expect,
-    it
+    it,
+    vi
 } from 'vitest';
 
 import { DEFAULT_SETTINGS } from '../../../types/Settings';
 import {
+    PowerlineSetup,
     buildPowerlineSetupMenuItems,
     getCapDisplay,
     getSeparatorDisplay,
-    getThemeDisplay
+    getThemeDisplay,
+    type PowerlineSetupProps
 } from '../PowerlineSetup';
 
+class MockTtyStream extends PassThrough {
+    isTTY = true;
+    columns = 120;
+    rows = 40;
+
+    setRawMode() {
+        return this;
+    }
+
+    ref() {
+        return this;
+    }
+
+    unref() {
+        return this;
+    }
+}
+
+interface CapturedWriteStream extends NodeJS.WriteStream { getOutput: () => string }
+
+function createMockStdin(): NodeJS.ReadStream {
+    return new MockTtyStream() as unknown as NodeJS.ReadStream;
+}
+
+function createMockStdout(): CapturedWriteStream {
+    const stream = new MockTtyStream();
+    const chunks: string[] = [];
+
+    stream.on('data', (chunk: Buffer | string) => {
+        chunks.push(chunk.toString());
+    });
+
+    return Object.assign(stream as unknown as NodeJS.WriteStream, {
+        getOutput() {
+            return chunks.join('');
+        }
+    });
+}
+
+function flushInk() {
+    return new Promise((resolve) => {
+        setTimeout(resolve, 25);
+    });
+}
+
 describe('PowerlineSetup helpers', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('formats separator, cap, and theme display values', () => {
         const config = {
             ...DEFAULT_SETTINGS.powerline,
@@ -53,5 +109,60 @@ describe('PowerlineSetup helpers', () => {
         expect(enabledItems[1]).toMatchObject({ sublabel: '(无)' });
         expect(enabledItems[2]).toMatchObject({ sublabel: '(斜线)' });
         expect(enabledItems[3]).toMatchObject({ sublabel: '(自定义)' });
+    });
+
+    it('toggles continue theme across lines when (c) is pressed', async () => {
+        const stdin = createMockStdin();
+        const stdout = createMockStdout();
+        const stderr = createMockStdout();
+        const onUpdate = vi.fn<PowerlineSetupProps['onUpdate']>();
+        const onBack = vi.fn();
+        const onInstallFonts = vi.fn();
+        const onClearMessage = vi.fn();
+        const instance = render(
+            React.createElement(PowerlineSetup, {
+                settings: {
+                    ...DEFAULT_SETTINGS,
+                    powerline: {
+                        ...DEFAULT_SETTINGS.powerline,
+                        enabled: true,
+                        continueThemeAcrossLines: false
+                    }
+                },
+                powerlineFontStatus: { installed: true },
+                onUpdate,
+                onBack,
+                onInstallFonts,
+                installingFonts: false,
+                fontInstallMessage: null,
+                onClearMessage
+            }),
+            {
+                stdin,
+                stdout,
+                stderr,
+                debug: true,
+                exitOnCtrlC: false,
+                patchConsole: false
+            }
+        );
+
+        try {
+            await flushInk();
+            expect(stdout.getOutput()).toContain('主题色延续:');
+
+            stdin.write('c');
+            await flushInk();
+
+            const updatedSettings = onUpdate.mock.calls[0]?.[0];
+            expect(updatedSettings).toBeDefined();
+            expect(updatedSettings?.powerline.continueThemeAcrossLines).toBe(true);
+        } finally {
+            instance.unmount();
+            instance.cleanup();
+            stdin.destroy();
+            stdout.destroy();
+            stderr.destroy();
+        }
     });
 });
