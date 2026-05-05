@@ -89,7 +89,7 @@ describe('SkillsWidget', () => {
             metadata: { mode: 'list', listLimit: '2' }
         });
 
-        expect(display.modifierText).toBe('(唯一列表, limit: 2)');
+        expect(display.modifierText).toBe('(唯一列表, 数量限制: 2)');
     });
 
     it('renders current, count, and list modes from skills metrics', () => {

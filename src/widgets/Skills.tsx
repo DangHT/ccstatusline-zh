@@ -92,7 +92,7 @@ export class SkillsWidget implements Widget {
         if (this.getMode(item) === 'list') {
             const limit = parseListLimit(item);
             if (limit > 0) {
-                modifiers.push(`limit: ${limit}`);
+                modifiers.push(`数量限制: ${limit}`);
             }
         }
         if (this.isHideWhenEmptyEnabled(item)) {
@@ -199,14 +199,14 @@ const SkillsEditor: React.FC<WidgetEditorProps> = ({ widget, onComplete, onCance
         return (
             <Box flexDirection='column'>
                 <Box>
-                    <Text>输入最大显示技能数（0 为不限制）：</Text>
+                    <Text>Enter max skills to show (0 for unlimited): </Text>
                     <Text>{limitInput}</Text>
                     <Text backgroundColor='gray' color='black'>{' '}</Text>
                 </Box>
-                <Text dimColor>按 Enter 保存，ESC 取消</Text>
+                <Text dimColor>Press Enter to save, ESC to cancel</Text>
             </Box>
         );
     }
 
-    return <Text>未知编辑模式</Text>;
+    return <Text>Unknown editor mode</Text>;
 };

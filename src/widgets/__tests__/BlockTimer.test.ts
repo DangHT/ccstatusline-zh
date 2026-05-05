@@ -95,9 +95,9 @@ describe('BlockTimerWidget', () => {
             elapsedPercent: 40,
             remainingPercent: 60
         });
-        mockFormatUsageDuration.mockReturnValue('2时');
+        mockFormatUsageDuration.mockReturnValue('2hr');
 
-        expect(render(widget, { id: 'block', type: 'block-timer', rawValue: true }, { usageData: {} })).toBe('2时');
+        expect(render(widget, { id: 'block', type: 'block-timer', rawValue: true }, { usageData: {} })).toBe('2hr');
     });
 
     runUsageTimerEditorSuite({

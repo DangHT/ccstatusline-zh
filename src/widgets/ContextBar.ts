@@ -40,11 +40,11 @@ export class ContextBarWidget implements Widget {
         const modifiers: string[] = [];
 
         if (mode === 'progress-short') {
-            modifiers.push('短进度条');
+            modifiers.push('中进度条');
         } else if (mode === 'slider') {
-            modifiers.push('短条形');
+            modifiers.push('短进度条');
         } else if (mode === 'slider-only') {
-            modifiers.push('仅短条形');
+            modifiers.push('仅短进度条');
         }
 
         return {

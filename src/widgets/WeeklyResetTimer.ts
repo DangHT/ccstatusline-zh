@@ -76,7 +76,7 @@ function getWeeklyResetModifierText(item: WidgetItem): string | undefined {
     if (displayMode === 'progress') {
         modifiers.push('长进度条');
     } else if (displayMode === 'progress-short') {
-        modifiers.push('短进度条');
+        modifiers.push('中进度条');
     }
 
     if (isUsageInverted(item)) {

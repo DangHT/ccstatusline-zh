@@ -174,13 +174,13 @@ describe('CurrentWorkingDirWidget', () => {
         it('should show ~ and segments modifiers combined', () => {
             const item = createItem({ abbreviateHome: 'true', segments: '2' });
             const display = widget.getEditorDisplay(item);
-            expect(display.modifierText).toBe('(~, segments: 2)');
+            expect(display.modifierText).toBe('(~, 段数: 2)');
         });
 
         it('should not show ~ modifier when fishStyle is enabled', () => {
             const item = createItem({ fishStyle: 'true' });
             const display = widget.getEditorDisplay(item);
-            expect(display.modifierText).toBe('(fish-style)');
+            expect(display.modifierText).toBe('(fish 风格)');
         });
     });
 

@@ -67,7 +67,7 @@ export class GitIsForkWidget implements Widget {
 
     getCustomKeybinds(): CustomKeybind[] {
         return [
-            { key: 'h', label: '(h)ide when not fork', action: TOGGLE_HIDE_ACTION }
+            { key: 'h', label: '(h)非 Fork 时隐藏', action: TOGGLE_HIDE_ACTION }
         ];
     }
 

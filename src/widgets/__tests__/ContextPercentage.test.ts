@@ -131,7 +131,7 @@ describe('ContextPercentageWidget', () => {
             }
         };
 
-        expect(widget.render(item, context, DEFAULT_SETTINGS)).toBe('Ctx: ▓▓▓▓▓░░░░░ 50.0%');
+        expect(widget.render(item, context, DEFAULT_SETTINGS)).toBe('已用: ▓▓▓▓▓░░░░░ 50.0%');
     });
 
     it('renders slider only in slider-only mode', () => {
@@ -151,7 +151,7 @@ describe('ContextPercentageWidget', () => {
             }
         };
 
-        expect(widget.render(item, context, DEFAULT_SETTINGS)).toBe('Ctx: ▓▓▓▓▓░░░░░');
+        expect(widget.render(item, context, DEFAULT_SETTINGS)).toBe('已用: ▓▓▓▓▓░░░░░');
     });
 
     describe('Older models with 200k context window', () => {

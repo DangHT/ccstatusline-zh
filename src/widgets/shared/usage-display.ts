@@ -21,9 +21,10 @@ const SLIDER_WIDTH = 10;
 const PROGRESS_TOGGLE_KEYBIND: CustomKeybind = { key: 'p', label: '(p)进度条切换', action: 'toggle-progress' };
 const INVERT_TOGGLE_KEYBIND: CustomKeybind = { key: 'v', label: '(v)反转填充', action: 'toggle-invert' };
 const COMPACT_TOGGLE_KEYBIND: CustomKeybind = { key: 's', label: '(s)短时间', action: 'toggle-compact' };
+const CURSOR_TOGGLE_KEYBIND: CustomKeybind = { key: 't', label: '(t)时间游标', action: 'toggle-cursor' };
 const DATE_TOGGLE_KEYBIND: CustomKeybind = { key: 't', label: '(t)时间戳', action: 'toggle-date' };
-const HOUR_FORMAT_TOGGLE_KEYBIND: CustomKeybind = { key: 'h', label: '12/24 (h)小时', action: 'toggle-hour-format' };
-const TIMEZONE_KEYBIND: CustomKeybind = { key: 'z', label: '时(z)区', action: 'edit-timezone' };
+const HOUR_FORMAT_TOGGLE_KEYBIND: CustomKeybind = { key: 'h', label: '12/24 小时(h)', action: 'toggle-hour-format' };
+const TIMEZONE_KEYBIND: CustomKeybind = { key: 'z', label: '时区(z)', action: 'edit-timezone' };
 const LOCALE_KEYBIND: CustomKeybind = { key: 'l', label: '(l)地区', action: 'edit-locale' };
 
 export function getUsageDisplayMode(item: WidgetItem): UsageDisplayMode {
@@ -42,11 +43,27 @@ export function isUsageSliderMode(mode: UsageDisplayMode): boolean {
     return mode === 'slider' || mode === 'slider-only';
 }
 
-export function makeSliderBar(percent: number, width: number = SLIDER_WIDTH): string {
+interface SliderBarOptions { cursorPercent?: number }
+
+export function makeSliderBar(percent: number, width: number = SLIDER_WIDTH, options?: SliderBarOptions): string {
     const clamped = Math.max(0, Math.min(100, percent));
     const filled = Math.round((clamped / 100) * width);
-    const empty = width - filled;
-    return '▓'.repeat(filled) + '░'.repeat(empty);
+    const cursorPos = options?.cursorPercent !== undefined
+        ? Math.min(Math.floor((Math.max(0, Math.min(100, options.cursorPercent)) / 100) * width), width - 1)
+        : -1;
+
+    let bar = '';
+    for (let i = 0; i < width; i++) {
+        if (i === cursorPos) {
+            bar += '│';
+        } else if (i < filled) {
+            bar += '▓';
+        } else {
+            bar += '░';
+        }
+    }
+
+    return bar;
 }
 
 export function getUsageProgressBarWidth(mode: UsageDisplayMode): number {
@@ -59,6 +76,14 @@ export function isUsageInverted(item: WidgetItem): boolean {
 
 export function isUsageCompact(item: WidgetItem): boolean {
     return isMetadataFlagEnabled(item, 'compact');
+}
+
+export function isUsageCursorEnabled(item: WidgetItem): boolean {
+    return isMetadataFlagEnabled(item, 'cursor');
+}
+
+export function toggleUsageCursor(item: WidgetItem): WidgetItem {
+    return toggleMetadataFlag(item, 'cursor');
 }
 
 export function isUsageDateMode(item: WidgetItem): boolean {
@@ -145,15 +170,19 @@ export function getUsageDisplayModifierText(
     if (mode === 'progress') {
         modifiers.push('长进度条');
     } else if (mode === 'progress-short') {
-        modifiers.push('短进度条');
+        modifiers.push('中进度条');
     } else if (mode === 'slider') {
-        modifiers.push('迷你进度条');
+        modifiers.push('短进度条');
     } else if (mode === 'slider-only') {
-        modifiers.push('仅迷你进度条');
+        modifiers.push('仅短进度条');
     }
 
     if (isUsageInverted(item)) {
         modifiers.push('反转');
+    }
+
+    if (isUsageCursorEnabled(item) && (isUsageProgressMode(mode) || isUsageSliderMode(mode))) {
+        modifiers.push('时间游标');
     }
 
     if (options.includeCompact && !isUsageProgressMode(mode) && isUsageCompact(item)) {
@@ -202,9 +231,8 @@ export function cycleUsageDisplayMode(item: WidgetItem, disabledInProgressKeys: 
                 : 'time';
     }
 
-    const nextItem = removeMetadataKeys(item, nextMode === 'time'
-        ? ['invert']
-        : disabledInProgressKeys);
+    const keysToRemove = nextMode === 'time' ? ['invert', 'cursor'] : disabledInProgressKeys;
+    const nextItem = removeMetadataKeys(item, keysToRemove);
     const nextMetadata: Record<string, string> = {
         ...(nextItem.metadata ?? {}),
         display: nextMode
@@ -227,6 +255,9 @@ export function getUsagePercentCustomKeybinds(item?: WidgetItem): CustomKeybind[
         const mode = getUsageDisplayMode(item);
         if (isUsageProgressMode(mode) || isUsageSliderMode(mode)) {
             keybinds.push(INVERT_TOGGLE_KEYBIND);
+        }
+        if (isUsageProgressMode(mode) || isUsageSliderMode(mode)) {
+            keybinds.push(CURSOR_TOGGLE_KEYBIND);
         }
     }
 

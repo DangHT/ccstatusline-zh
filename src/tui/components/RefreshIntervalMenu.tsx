@@ -20,14 +20,14 @@ function getRefreshInputValue(interval: number | null): string {
 
 function getRefreshIntervalSublabel(interval: number | null, supported: boolean): string {
     if (!supported) {
-        return '(requires Claude Code >=2.1.97)';
+        return '（需要 Claude Code ≥ 2.1.97）';
     }
 
     if (interval === null) {
-        return '(not set)';
+        return '（未设置）';
     }
 
-    return `(${interval}s)`;
+    return `（${interval} 秒）`;
 }
 
 export function buildConfigureStatusLineItems(
@@ -36,13 +36,13 @@ export function buildConfigureStatusLineItems(
 ): ListEntry<ConfigureStatusLineValue>[] {
     return [
         {
-            label: '🔄 Refresh Interval',
+            label: '🔄 刷新间隔',
             sublabel: getRefreshIntervalSublabel(refreshInterval, supportsRefreshInterval),
             value: 'refreshInterval',
             disabled: !supportsRefreshInterval,
             description: supportsRefreshInterval
-                ? 'How often Claude Code refreshes the status line by re-running the command. Enter value in seconds (1-60), or leave empty to remove.'
-                : 'This setting requires Claude Code version 2.1.97 or later. Please update Claude Code to use this feature.'
+                ? 'Claude Code 重新运行状态栏命令的频率。输入秒数 (1-60)，留空即移除。'
+                : '本设置需要 Claude Code 2.1.97 或更高版本。请升级 Claude Code 后再使用。'
         }
     ];
 }
@@ -55,15 +55,15 @@ export function validateRefreshIntervalInput(value: string): string | null {
     const parsed = parseInt(value, 10);
 
     if (isNaN(parsed)) {
-        return 'Please enter a valid number';
+        return '请输入有效数字';
     }
 
     if (parsed < 1) {
-        return `Minimum interval is 1s (you entered ${parsed}s)`;
+        return `最小间隔为 1 秒（输入了 ${parsed} 秒）`;
     }
 
     if (parsed > 60) {
-        return `Maximum interval is 60s (you entered ${parsed}s)`;
+        return `最大间隔为 60 秒（输入了 ${parsed} 秒）`;
     }
 
     return null;
@@ -132,21 +132,21 @@ export const RefreshIntervalMenu: React.FC<RefreshIntervalMenuProps> = ({
 
     return (
         <Box flexDirection='column'>
-            <Text bold>Configure Status Line</Text>
-            <Text color='white'>Configure Claude Code status line settings</Text>
+            <Text bold>配置状态行</Text>
+            <Text color='white'>配置 Claude Code 状态行设置</Text>
 
             {editingRefreshInterval ? (
                 <Box marginTop={1} flexDirection='column'>
                     <Text>
-                        Enter refresh interval in seconds (1-60):
+                        输入刷新间隔（秒，1-60）:
                         {' '}
                         {refreshInput}
-                        {refreshInput.length > 0 ? 's' : ''}
+                        {refreshInput.length > 0 ? ' 秒' : ''}
                     </Text>
                     {validationError ? (
                         <Text color='red'>{validationError}</Text>
                     ) : (
-                        <Text dimColor>Press Enter to confirm, ESC to cancel. Leave empty to remove.</Text>
+                        <Text dimColor>按 Enter 确认，ESC 取消。留空即移除。</Text>
                     )}
                 </Box>
             ) : (

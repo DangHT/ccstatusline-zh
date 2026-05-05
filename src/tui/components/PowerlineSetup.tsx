@@ -47,10 +47,10 @@ export function getSeparatorDisplay(powerlineConfig: PowerlineConfig): string {
     const preset = presets.find(item => item.char === sep);
 
     if (preset) {
-        return preset.name;
+        return `${preset.char} - ${preset.name}`;
     }
 
-    return '自定义';
+    return `${sep} - 自定义`;
 }
 
 export function getCapDisplay(
@@ -89,10 +89,10 @@ export function getCapDisplay(
     const preset = presets.find(item => item.char === cap);
 
     if (preset) {
-        return preset.name;
+        return `${preset.char} - ${preset.name}`;
     }
 
-    return '自定义';
+    return `${cap} - 自定义`;
 }
 
 export function getThemeDisplay(powerlineConfig: PowerlineConfig): string {

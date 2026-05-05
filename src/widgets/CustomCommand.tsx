@@ -25,20 +25,20 @@ export class CustomCommandWidget implements Widget {
     getCategory(): string { return '自定义'; }
 
     getEditorDisplay(item: WidgetItem): WidgetEditorDisplay {
-        const cmd = item.commandPath ?? '无命令';
+        const cmd = item.commandPath ?? '[无命令]';
         const truncatedCmd = cmd.length > 20 ? `${cmd.substring(0, 17)}...` : cmd;
         const displayText = `${this.getDisplayName()} (${truncatedCmd})`;
 
         // Build modifiers string
         const modifiers: string[] = [];
         if (item.maxWidth) {
-            modifiers.push(`max:${item.maxWidth}`);
+            modifiers.push(`最大宽度:${item.maxWidth}`);
         }
         if (item.timeout && item.timeout !== 1000) {
-            modifiers.push(`timeout:${item.timeout}ms`);
+            modifiers.push(`超时:${item.timeout}ms`);
         }
         if (item.preserveColors) {
-            modifiers.push('preserve');
+            modifiers.push('保留颜色');
         }
 
         return {
@@ -56,7 +56,7 @@ export class CustomCommandWidget implements Widget {
 
     render(item: WidgetItem, context: RenderContext, settings: Settings): string | null {
         if (context.isPreview) {
-            return item.commandPath ? `[cmd: ${item.commandPath.substring(0, 20)}${item.commandPath.length > 20 ? '...' : ''}]` : '[无命令]';
+            return item.commandPath ? `[cmd: ${item.commandPath.substring(0, 20)}${item.commandPath.length > 20 ? '...' : ''}]` : '[No command]';
         } else if (item.commandPath && context.data) {
             try {
                 const timeout = item.timeout ?? 1000;
@@ -207,38 +207,38 @@ const CustomCommandEditor: React.FC<WidgetEditorProps> = ({ widget, onComplete, 
         return (
             <Box flexDirection='column'>
                 <Text>
-                    输入命令路径：
+                    Enter command path:
                     {' '}
                     {commandInput.slice(0, commandCursorPos)}
                     <Text backgroundColor='gray' color='black'>{commandInput[commandCursorPos] ?? ' '}</Text>
                     {commandInput.slice(commandCursorPos + 1)}
                 </Text>
-                <Text dimColor>←→ 移动光标，Enter 保存，ESC 取消</Text>
+                <Text dimColor>←→ move cursor, Enter save, ESC cancel</Text>
             </Box>
         );
     } else if (mode === 'width') {
         return (
             <Box flexDirection='column'>
                 <Box>
-                    <Text>输入最大宽度（留空表示不限制）：</Text>
+                    <Text>Enter max width (blank for no limit): </Text>
                     <Text>{widthInput}</Text>
                     <Text backgroundColor='gray' color='black'>{' '}</Text>
                 </Box>
-                <Text dimColor>按 Enter 保存，ESC 取消</Text>
+                <Text dimColor>Press Enter to save, ESC to cancel</Text>
             </Box>
         );
     } else if (mode === 'timeout') {
         return (
             <Box flexDirection='column'>
                 <Box>
-                    <Text>输入超时时间（毫秒，默认 1000）：</Text>
+                    <Text>Enter timeout in milliseconds (default 1000): </Text>
                     <Text>{timeoutInput}</Text>
                     <Text backgroundColor='gray' color='black'>{' '}</Text>
                 </Box>
-                <Text dimColor>按 Enter 保存，ESC 取消</Text>
+                <Text dimColor>Press Enter to save, ESC to cancel</Text>
             </Box>
         );
     }
 
-    return <Text>未知编辑模式</Text>;
+    return <Text>Unknown editor mode</Text>;
 };

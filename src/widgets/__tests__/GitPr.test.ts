@@ -103,19 +103,19 @@ describe('GitPrWidget', () => {
         );
     });
 
-    it('should return (no PR) when not in git repo', () => {
-        expect(render({ cwd: '/tmp/not-a-repo' }, { isInsideGitWorkTree: () => false })).toBe('（无 PR）');
+    it('should return (无 PR) when not in git repo', () => {
+        expect(render({ cwd: '/tmp/not-a-repo' }, { isInsideGitWorkTree: () => false })).toBe('(无 PR)');
     });
 
     it('should return null when hideNoGit and not in git repo', () => {
         expect(render({ cwd: '/tmp/not-a-repo', hideNoGit: true }, { isInsideGitWorkTree: () => false })).toBeNull();
     });
 
-    it('should return (no PR) when PR lookup returns null', () => {
+    it('should return (无 PR) when PR lookup returns null', () => {
         expect(render({}, {
             fetchGitReviewData: () => null,
             resolveGitCwd: () => undefined
-        })).toBe('（无 PR）');
+        })).toBe('(无 PR)');
     });
 
     it('should use process cwd when repo paths are omitted', () => {
@@ -187,7 +187,7 @@ describe('GitPrWidget', () => {
         );
     });
 
-    it('should return (no MR) when origin is GitLab and no MR exists', () => {
+    it('should return (无 MR) when origin is GitLab and no MR exists', () => {
         expect(render({ cwd: '/tmp/repo' }, {
             fetchGitReviewData: () => null,
             getRemoteInfo: () => ({
@@ -197,7 +197,7 @@ describe('GitPrWidget', () => {
                 owner: 'owner',
                 repo: 'repo'
             })
-        })).toBe('(no MR)');
+        })).toBe('(无 MR)');
     });
 
     it('should keep "PR #N" for GitHub PR URLs (regression guard)', () => {
@@ -231,7 +231,7 @@ describe('GitPrWidget', () => {
         );
     });
 
-    it('should fall back to (no PR) when the origin host name does not identify the forge', () => {
+    it('should fall back to (无 PR) when the origin host name does not identify the forge', () => {
         expect(render({ cwd: '/tmp/repo' }, {
             fetchGitReviewData: () => null,
             getRemoteInfo: () => ({
@@ -241,6 +241,6 @@ describe('GitPrWidget', () => {
                 owner: 'team',
                 repo: 'repo'
             })
-        })).toBe('(no PR)');
+        })).toBe('(无 PR)');
     });
 });

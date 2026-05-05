@@ -81,18 +81,6 @@ function resolvePrNoun(
     return 'PR';
 }
 
-function formatNoPrLabel(
-    context: RenderContext,
-    deps: GitPrWidgetDeps,
-    noun: 'PR' | 'MR'
-): string {
-    const origin = deps.getRemoteInfo('origin', context);
-    if (origin) {
-        return `(no ${noun})`;
-    }
-    return `（无 ${noun}）`;
-}
-
 function buildDisplay(
     item: WidgetItem,
     pr: GitReviewData,
@@ -161,13 +149,13 @@ export class GitPrWidget implements Widget {
         }
 
         if (!this.deps.isInsideGitWorkTree(context)) {
-            return hideNoGit ? null : formatNoPrLabel(context, this.deps, resolvePrNoun(null, context, this.deps));
+            return hideNoGit ? null : `(无 ${resolvePrNoun(null, context, this.deps)})`;
         }
 
         const cwd = this.deps.resolveGitCwd(context) ?? this.deps.getProcessCwd();
         const prData = this.deps.fetchGitReviewData(cwd);
         if (!prData) {
-            return hideNoGit ? null : formatNoPrLabel(context, this.deps, resolvePrNoun(null, context, this.deps));
+            return hideNoGit ? null : `(无 ${resolvePrNoun(null, context, this.deps)})`;
         }
 
         return buildDisplay(item, prData, showStatus, showTitle, resolvePrNoun(prData, context, this.deps));

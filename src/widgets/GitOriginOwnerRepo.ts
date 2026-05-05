@@ -90,7 +90,7 @@ export class GitOriginOwnerRepoWidget implements Widget {
     getCustomKeybinds(): CustomKeybind[] {
         return [
             ...getRemoteWidgetKeybinds(),
-            { key: 'o', label: '(o)wner only when fork', action: TOGGLE_OWNER_ONLY_ACTION }
+            { key: 'o', label: '(o)Fork 时仅显示 owner', action: TOGGLE_OWNER_ONLY_ACTION }
         ];
     }
 

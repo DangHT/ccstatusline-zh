@@ -11,6 +11,10 @@ import {
 
 import { DEFAULT_SETTINGS } from '../../../types/Settings';
 import {
+    PowerlineSeparatorEditor,
+    type PowerlineSeparatorEditorProps
+} from '../PowerlineSeparatorEditor';
+import {
     PowerlineSetup,
     buildPowerlineSetupMenuItems,
     getCapDisplay,
@@ -79,9 +83,9 @@ describe('PowerlineSetup helpers', () => {
             theme: 'gruvbox'
         };
 
-        expect(getSeparatorDisplay(config)).toBe('右圆弧');
-        expect(getCapDisplay(config, 'start')).toBe('三角');
-        expect(getCapDisplay(config, 'end')).toBe('三角');
+        expect(getSeparatorDisplay(config)).toBe('\uE0B4 - \u53F3\u5706\u5F27');
+        expect(getCapDisplay(config, 'start')).toBe('\uE0B2 - \u4E09\u89D2');
+        expect(getCapDisplay(config, 'end')).toBe('\uE0B0 - \u4E09\u89D2');
         expect(getThemeDisplay(config)).toBe('Gruvbox');
     });
 
@@ -103,12 +107,22 @@ describe('PowerlineSetup helpers', () => {
         });
 
         expect(enabledItems[0]).toMatchObject({
-            sublabel: '(多个)',
+            label: '\u5206\u9694\u7B26    ',
+            sublabel: '(\u591A\u4E2A)',
             disabled: false
         });
-        expect(enabledItems[1]).toMatchObject({ sublabel: '(无)' });
-        expect(enabledItems[2]).toMatchObject({ sublabel: '(斜线)' });
-        expect(enabledItems[3]).toMatchObject({ sublabel: '(自定义)' });
+        expect(enabledItems[1]).toMatchObject({
+            label: '\u8D77\u59CB\u7AEF\u5E3D  ',
+            sublabel: '(\u65E0)'
+        });
+        expect(enabledItems[2]).toMatchObject({
+            label: '\u7ED3\u675F\u7AEF\u5E3D  ',
+            sublabel: '(\uE0BC - \u659C\u7EBF)'
+        });
+        expect(enabledItems[3]).toMatchObject({
+            label: '\u4E3B\u9898      ',
+            sublabel: '(\u81EA\u5B9A\u4E49)'
+        });
     });
 
     it('toggles continue theme across lines when (c) is pressed', async () => {
@@ -157,6 +171,66 @@ describe('PowerlineSetup helpers', () => {
             const updatedSettings = onUpdate.mock.calls[0]?.[0];
             expect(updatedSettings).toBeDefined();
             expect(updatedSettings?.powerline.continueThemeAcrossLines).toBe(true);
+        } finally {
+            instance.unmount();
+            instance.cleanup();
+            stdin.destroy();
+            stdout.destroy();
+            stderr.destroy();
+        }
+    });
+});
+
+describe('PowerlineSeparatorEditor', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it.each([
+        ['startCap', 'startCaps', '\uE0B2'],
+        ['endCap', 'endCaps', '\uE0B0']
+    ] as const)('allows adding more than 3 %s entries', async (mode, capKey, expectedDefaultCap) => {
+        const stdin = createMockStdin();
+        const stdout = createMockStdout();
+        const stderr = createMockStdout();
+        const onUpdate = vi.fn<PowerlineSeparatorEditorProps['onUpdate']>();
+        const onBack = vi.fn();
+        const existingCaps = [expectedDefaultCap, expectedDefaultCap, expectedDefaultCap];
+        const instance = render(
+            React.createElement(PowerlineSeparatorEditor, {
+                settings: {
+                    ...DEFAULT_SETTINGS,
+                    powerline: {
+                        ...DEFAULT_SETTINGS.powerline,
+                        enabled: true,
+                        [capKey]: existingCaps
+                    }
+                },
+                mode,
+                onUpdate,
+                onBack
+            }),
+            {
+                stdin,
+                stdout,
+                stderr,
+                debug: true,
+                exitOnCtrlC: false,
+                patchConsole: false
+            }
+        );
+
+        try {
+            await flushInk();
+            expect(stdout.getOutput()).toContain('(a)添加');
+
+            stdin.write('a');
+            await flushInk();
+
+            const updatedSettings = onUpdate.mock.calls[0]?.[0];
+            expect(updatedSettings).toBeDefined();
+            expect(updatedSettings?.powerline[capKey]).toHaveLength(4);
+            expect(updatedSettings?.powerline[capKey][1]).toBe(expectedDefaultCap);
         } finally {
             instance.unmount();
             instance.cleanup();

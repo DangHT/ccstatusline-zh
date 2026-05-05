@@ -98,13 +98,13 @@ describe('items-editor input handlers', () => {
     it('resets selection to best match when typing in category search', () => {
         const widgetCatalog = createCatalog([
             { type: 'vim-mode', displayName: 'Vim Mode', category: 'Core' },
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Core' }
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Core' }
         ]);
-        const widgetCategories = ['All', 'Core'];
+        const widgetCategories = ['全部', 'Core'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: '',
             widgetQuery: '',
             selectedType: 'git-branch'
@@ -126,9 +126,9 @@ describe('items-editor input handlers', () => {
     it('resets selection to best match when typing in widget search', () => {
         const widgetCatalog = createCatalog([
             { type: 'vim-mode', displayName: 'Vim Mode', category: 'Core' },
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Core' }
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Core' }
         ]);
-        const widgetCategories = ['All', 'Core'];
+        const widgetCategories = ['全部', 'Core'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'widget',
@@ -180,14 +180,14 @@ describe('items-editor input handlers', () => {
 
     it('wraps to last category when pressing up at first category', () => {
         const widgetCatalog = createCatalog([
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Git' },
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Git' },
             { type: 'tokens-input', displayName: 'Tokens Input', category: 'Tokens' }
         ]);
-        const widgetCategories = ['All', 'Git', 'Tokens'];
+        const widgetCategories = ['全部', 'Git', 'Tokens'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: '',
             widgetQuery: '',
             selectedType: null
@@ -208,10 +208,10 @@ describe('items-editor input handlers', () => {
 
     it('wraps to first category when pressing down at last category', () => {
         const widgetCatalog = createCatalog([
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Git' },
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Git' },
             { type: 'tokens-input', displayName: 'Tokens Input', category: 'Tokens' }
         ]);
-        const widgetCategories = ['All', 'Git', 'Tokens'];
+        const widgetCategories = ['全部', 'Git', 'Tokens'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'category',
@@ -231,16 +231,16 @@ describe('items-editor input handlers', () => {
             applyWidgetPickerSelection: vi.fn()
         });
 
-        expect(pickerState.get()?.selectedCategory).toBe('All');
+        expect(pickerState.get()?.selectedCategory).toBe('全部');
     });
 
     it('wraps to last widget when pressing up at first widget in picker', () => {
         const widgetCatalog = createCatalog([
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Git' },
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Git' },
             { type: 'git-changes', displayName: 'Git Changes', category: 'Git' },
             { type: 'git-insertions', displayName: 'Git Insertions', category: 'Git' }
         ]);
-        const widgetCategories = ['All', 'Git'];
+        const widgetCategories = ['全部', 'Git'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'widget',
@@ -265,11 +265,11 @@ describe('items-editor input handlers', () => {
 
     it('wraps to first widget when pressing down at last widget in picker', () => {
         const widgetCatalog = createCatalog([
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Git' },
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Git' },
             { type: 'git-changes', displayName: 'Git Changes', category: 'Git' },
             { type: 'git-insertions', displayName: 'Git Insertions', category: 'Git' }
         ]);
-        const widgetCategories = ['All', 'Git'];
+        const widgetCategories = ['全部', 'Git'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'widget',
@@ -294,14 +294,14 @@ describe('items-editor input handlers', () => {
 
     it('wraps to last search result when pressing up at first in top-level search', () => {
         const widgetCatalog = createCatalog([
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Git' },
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Git' },
             { type: 'git-changes', displayName: 'Git Changes', category: 'Git' }
         ]);
-        const widgetCategories = ['All', 'Git'];
+        const widgetCategories = ['全部', 'Git'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: 'git',
             widgetQuery: '',
             selectedType: 'git-branch'
@@ -322,14 +322,14 @@ describe('items-editor input handlers', () => {
 
     it('wraps to first search result when pressing down at last in top-level search', () => {
         const widgetCatalog = createCatalog([
-            { type: 'git-branch', displayName: 'Git Branch', category: 'Git' },
+            { type: 'git-branch', displayName: 'Git 分支', category: 'Git' },
             { type: 'git-changes', displayName: 'Git Changes', category: 'Git' }
         ]);
-        const widgetCategories = ['All', 'Git'];
+        const widgetCategories = ['全部', 'Git'];
         const pickerState = createStateSetter<WidgetPickerState | null>({
             action: 'change',
             level: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: 'git',
             widgetQuery: '',
             selectedType: 'git-changes'

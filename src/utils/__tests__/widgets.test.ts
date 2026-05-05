@@ -92,6 +92,7 @@ describe('widget catalog', () => {
 
         expect(categories).toContain('核心');
         expect(categories).toContain('Git');
+        expect(categories).toContain('Jujutsu');
         expect(categories).toContain('上下文');
         expect(categories).toContain('Token');
         expect(categories).toContain('Token 速度');
@@ -158,7 +159,7 @@ describe('widget catalog filtering', () => {
     });
 
     it('matches display name with case-insensitive partial search', () => {
-        const results = filterWidgetCatalog(catalog, '全部', 'Git 分');
+        const results = filterWidgetCatalog(catalog, '全部', 'gIt br');
         expect(results[0]?.type).toBe('git-branch');
     });
 
@@ -178,20 +179,12 @@ describe('widget catalog filtering', () => {
     });
 
     it('fuzzy-matches initials across word boundaries (gb → Git Branch)', () => {
-        const fuzzyCatalog: WidgetCatalogEntry[] = [
-            { type: 'git-branch' as WidgetItemType, displayName: 'Git Branch', description: '', category: 'Git', searchText: 'git branch git-branch' },
-            { type: 'git-deletions' as WidgetItemType, displayName: 'Git Deletions', description: '', category: 'Git', searchText: 'git deletions git-deletions' }
-        ];
-        const results = filterWidgetCatalog(fuzzyCatalog, '全部', 'gb');
+        const results = filterWidgetCatalog(catalog, '全部', 'gb');
         expect(results[0]?.type).toBe('git-branch');
     });
 
     it('prioritizes display-name fuzzy matches over description substring hits', () => {
-        const fuzzyCatalog: WidgetCatalogEntry[] = [
-            { type: 'terminal-width' as WidgetItemType, displayName: 'Terminal Width', description: '', category: 'Env', searchText: 'terminal width terminal-width' },
-            { type: 'other' as WidgetItemType, displayName: 'Other', description: 'something with tw inside', category: 'Env', searchText: 'other something with tw inside' }
-        ];
-        const results = filterWidgetCatalog(fuzzyCatalog, '全部', 'tw');
+        const results = filterWidgetCatalog(catalog, '全部', 'tw');
         expect(results[0]?.type).toBe('terminal-width');
     });
 
@@ -199,8 +192,7 @@ describe('widget catalog filtering', () => {
         const fuzzyCatalog: WidgetCatalogEntry[] = [
             { type: 'tokens-cached' as WidgetItemType, displayName: 'Tokens Cached', description: '', category: 'Token', searchText: 'tokens cached tokens-cached' },
             { type: 'tokens-input' as WidgetItemType, displayName: 'Tokens Input', description: '', category: 'Token', searchText: 'tokens input tokens-input' },
-            { type: 'tokens-output' as WidgetItemType, displayName: 'Tokens Output', description: '', category: 'Token', searchText: 'tokens output tokens-output' },
-            { type: 'tokens-total' as WidgetItemType, displayName: 'Tokens Total', description: '', category: 'Token', searchText: 'tokens total tokens-total' }
+            { type: 'tokens-output' as WidgetItemType, displayName: 'Tokens Output', description: '', category: 'Token', searchText: 'tokens output tokens-output' }
         ];
         expect(filterWidgetCatalog(fuzzyCatalog, '全部', 'tc')[0]?.type).toBe('tokens-cached');
         expect(filterWidgetCatalog(fuzzyCatalog, '全部', 'ti')[0]?.type).toBe('tokens-input');
@@ -238,23 +230,23 @@ describe('widget catalog filtering', () => {
         const rankingCatalog: WidgetCatalogEntry[] = [
             {
                 type: 'alpha' as WidgetItemType,
-                displayName: 'Git 分支',
+                displayName: 'Git Branch',
                 description: 'Primary match',
-                category: '核心',
+                category: 'Core',
                 searchText: 'git branch primary match alpha'
             },
             {
                 type: 'git-type-only' as WidgetItemType,
                 displayName: 'Branch',
                 description: 'Type fallback match',
-                category: '核心',
+                category: 'Core',
                 searchText: 'branch type fallback match git-type-only'
             },
             {
                 type: 'desc-only' as WidgetItemType,
                 displayName: 'Branch',
                 description: 'Description contains git',
-                category: '核心',
+                category: 'Core',
                 searchText: 'branch description contains git desc-only'
             }
         ];

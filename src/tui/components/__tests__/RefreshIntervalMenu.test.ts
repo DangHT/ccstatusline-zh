@@ -72,37 +72,37 @@ describe('validateRefreshIntervalInput', () => {
     });
 
     it('should reject values below minimum', () => {
-        expect(validateRefreshIntervalInput('0')).toContain('Minimum');
+        expect(validateRefreshIntervalInput('0')).toContain('最小间隔');
     });
 
     it('should reject values above maximum', () => {
-        expect(validateRefreshIntervalInput('61')).toContain('Maximum');
+        expect(validateRefreshIntervalInput('61')).toContain('最大间隔');
     });
 
     it('should reject non-numeric input', () => {
-        expect(validateRefreshIntervalInput('abc')).toContain('valid number');
+        expect(validateRefreshIntervalInput('abc')).toContain('有效数字');
     });
 });
 
 describe('buildConfigureStatusLineItems', () => {
     it('should show (not set) when interval is null and supported', () => {
         const items = buildConfigureStatusLineItems(null, true);
-        expect(items[0]?.sublabel).toBe('(not set)');
+        expect(items[0]?.sublabel).toBe('（未设置）');
     });
 
     it('should show seconds for set intervals', () => {
         const items = buildConfigureStatusLineItems(10, true);
-        expect(items[0]?.sublabel).toBe('(10s)');
+        expect(items[0]?.sublabel).toBe('（10 秒）');
     });
 
     it('should show seconds for small values', () => {
         const items = buildConfigureStatusLineItems(1, true);
-        expect(items[0]?.sublabel).toBe('(1s)');
+        expect(items[0]?.sublabel).toBe('（1 秒）');
     });
 
     it('should show version requirement when not supported', () => {
         const items = buildConfigureStatusLineItems(null, false);
-        expect(items[0]?.sublabel).toContain('requires Claude Code');
+        expect(items[0]?.sublabel).toContain('需要 Claude Code');
         expect(items[0]?.disabled).toBe(true);
     });
 
@@ -141,7 +141,7 @@ describe('RefreshIntervalMenu', () => {
             stdin.write('\r');
             await flushInk();
 
-            expect(stdout.getOutput()).toContain('Enter refresh interval in seconds (1-60):');
+            expect(stdout.getOutput()).toContain('输入刷新间隔（秒，1-60）:');
             expect(stdout.getOutput()).not.toContain('10s');
 
             stdin.write('\r');

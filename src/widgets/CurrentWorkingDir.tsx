@@ -33,9 +33,9 @@ export class CurrentWorkingDirWidget implements Widget {
         }
 
         if (fishStyle) {
-            modifiers.push('fish-style');
+            modifiers.push('fish 风格');
         } else if (segments && segments > 0) {
-            modifiers.push(`segments: ${segments}`);
+            modifiers.push(`段数: ${segments}`);
         }
 
         return {
@@ -132,7 +132,7 @@ export class CurrentWorkingDirWidget implements Widget {
                 previewPath = '/Users/example/Documents/Projects/my-project';
             }
 
-            return item.rawValue ? previewPath : `目录: ${previewPath}`;
+            return item.rawValue ? previewPath : `cwd: ${previewPath}`;
         }
 
         const cwd = context.data?.cwd;
@@ -169,7 +169,7 @@ export class CurrentWorkingDirWidget implements Widget {
             }
         }
 
-        return item.rawValue ? displayPath : `目录: ${displayPath}`;
+        return item.rawValue ? displayPath : `cwd: ${displayPath}`;
     }
 
     getCustomKeybinds(): CustomKeybind[] {
@@ -280,14 +280,14 @@ const CurrentWorkingDirEditor: React.FC<WidgetEditorProps> = ({ widget, onComple
         return (
             <Box flexDirection='column'>
                 <Box>
-                    <Text>输入要显示的路径段数（留空显示完整路径）：</Text>
+                    <Text>Enter number of segments to display (blank for full path): </Text>
                     <Text>{segmentsInput}</Text>
                     <Text backgroundColor='gray' color='black'>{' '}</Text>
                 </Box>
-                <Text dimColor>按 Enter 保存，ESC 取消</Text>
+                <Text dimColor>Press Enter to save, ESC to cancel</Text>
             </Box>
         );
     }
 
-    return <Text>未知的编辑模式</Text>;
+    return <Text>Unknown editor mode</Text>;
 };

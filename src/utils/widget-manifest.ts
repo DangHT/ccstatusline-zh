@@ -44,6 +44,14 @@ export const WIDGET_MANIFEST: WidgetManifestEntry[] = [
     { type: 'git-upstream-repo', create: () => new widgets.GitUpstreamRepoWidget() },
     { type: 'git-upstream-owner-repo', create: () => new widgets.GitUpstreamOwnerRepoWidget() },
     { type: 'git-is-fork', create: () => new widgets.GitIsForkWidget() },
+    { type: 'jj-bookmarks', create: () => new widgets.JjBookmarksWidget() },
+    { type: 'jj-workspace', create: () => new widgets.JjWorkspaceWidget() },
+    { type: 'jj-root-dir', create: () => new widgets.JjRootDirWidget() },
+    { type: 'jj-changes', create: () => new widgets.JjChangesWidget() },
+    { type: 'jj-insertions', create: () => new widgets.JjInsertionsWidget() },
+    { type: 'jj-deletions', create: () => new widgets.JjDeletionsWidget() },
+    { type: 'jj-description', create: () => new widgets.JjDescriptionWidget() },
+    { type: 'jj-revision', create: () => new widgets.JjRevisionWidget() },
     { type: 'current-working-dir', create: () => new widgets.CurrentWorkingDirWidget() },
     { type: 'tokens-input', create: () => new widgets.TokensInputWidget() },
     { type: 'tokens-output', create: () => new widgets.TokensOutputWidget() },
@@ -80,7 +88,8 @@ export const WIDGET_MANIFEST: WidgetManifestEntry[] = [
     { type: 'worktree-mode', create: () => new widgets.GitWorktreeModeWidget() },
     { type: 'worktree-name', create: () => new widgets.GitWorktreeNameWidget() },
     { type: 'worktree-branch', create: () => new widgets.GitWorktreeBranchWidget() },
-    { type: 'worktree-original-branch', create: () => new widgets.GitWorktreeOriginalBranchWidget() }
+    { type: 'worktree-original-branch', create: () => new widgets.GitWorktreeOriginalBranchWidget() },
+    { type: 'compaction-counter', create: () => new widgets.CompactionCounterWidget() }
 ];
 
 export const LAYOUT_WIDGET_MANIFEST: LayoutWidgetManifestEntry[] = [

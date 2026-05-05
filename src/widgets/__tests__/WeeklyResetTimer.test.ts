@@ -252,8 +252,8 @@ describe('WeeklyResetTimerWidget', () => {
             { key: 'p', label: '(p)进度条切换', action: 'toggle-progress' },
             { key: 's', label: '(s)短时间', action: 'toggle-compact' },
             { key: 't', label: '(t)时间戳', action: 'toggle-date' },
-            { key: 'h', label: '12/24 (h)小时', action: 'toggle-hour-format' },
-            { key: 'z', label: '时(z)区', action: 'edit-timezone' },
+            { key: 'h', label: '12/24 小时(h)', action: 'toggle-hour-format' },
+            { key: 'z', label: '时区(z)', action: 'edit-timezone' },
             { key: 'l', label: '(l)地区', action: 'edit-locale' }
         ]);
     });
@@ -269,7 +269,7 @@ describe('WeeklyResetTimerWidget', () => {
             { key: 'h', label: '(h)仅小时', action: 'toggle-hours' }
         ],
         supportsDateMode: true,
-        expectedModifierText: '(短进度条, 反转)',
+        expectedModifierText: '(中进度条, 反转)',
         expectedProgressKeybinds: [
             { key: 'p', label: '(p)进度条切换', action: 'toggle-progress' },
             { key: 'v', label: '(v)反转填充', action: 'toggle-invert' }

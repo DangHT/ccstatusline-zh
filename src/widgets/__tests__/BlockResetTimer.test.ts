@@ -54,9 +54,9 @@ describe('BlockResetTimerWidget', () => {
             elapsedPercent: 20,
             remainingPercent: 80
         });
-        mockFormatUsageDuration.mockReturnValue('4时');
+        mockFormatUsageDuration.mockReturnValue('4hr');
 
-        expect(render(widget, { id: 'reset', type: 'reset-timer' }, { usageData: {} })).toBe('重置: 4时');
+        expect(render(widget, { id: 'reset', type: 'reset-timer' }, { usageData: {} })).toBe('重置: 4hr');
     });
 
     it('renders short progress bar with inverted fill', () => {
@@ -108,9 +108,9 @@ describe('BlockResetTimerWidget', () => {
             elapsedPercent: 25,
             remainingPercent: 75
         });
-        mockFormatUsageDuration.mockReturnValue('3时 45分');
+        mockFormatUsageDuration.mockReturnValue('3hr 45m');
 
-        expect(render(widget, { id: 'reset', type: 'reset-timer', rawValue: true }, { usageData: {} })).toBe('3时 45分');
+        expect(render(widget, { id: 'reset', type: 'reset-timer', rawValue: true }, { usageData: {} })).toBe('3hr 45m');
     });
 
     it('shows reset timestamp in date mode', () => {
@@ -158,8 +158,8 @@ describe('BlockResetTimerWidget', () => {
             { key: 'p', label: '(p)进度条切换', action: 'toggle-progress' },
             { key: 's', label: '(s)短时间', action: 'toggle-compact' },
             { key: 't', label: '(t)时间戳', action: 'toggle-date' },
-            { key: 'h', label: '12/24 (h)小时', action: 'toggle-hour-format' },
-            { key: 'z', label: '时(z)区', action: 'edit-timezone' },
+            { key: 'h', label: '12/24 小时(h)', action: 'toggle-hour-format' },
+            { key: 'z', label: '时区(z)', action: 'edit-timezone' },
             { key: 'l', label: '(l)地区', action: 'edit-locale' }
         ]);
     });
@@ -189,7 +189,7 @@ describe('BlockResetTimerWidget', () => {
             { key: 't', label: '(t)时间戳', action: 'toggle-date' }
         ],
         supportsDateMode: true,
-        expectedModifierText: '(短进度条, 反转)',
+        expectedModifierText: '(中进度条, 反转)',
         expectedProgressKeybinds: [
             { key: 'p', label: '(p)进度条切换', action: 'toggle-progress' },
             { key: 'v', label: '(v)反转填充', action: 'toggle-invert' }

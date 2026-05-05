@@ -184,8 +184,8 @@ export const PowerlineSeparatorEditor: React.FC<PowerlineSeparatorEditorProps> =
                 }
 
                 updateSeparators(newSeparators, mode === 'separator' ? newInvertBgs : undefined);
-            } else if ((input === 'a' || input === 'A') && (mode === 'separator' || separators.length < 3)) {
-                // Add after current (max 3 for caps)
+            } else if (input === 'a' || input === 'A') {
+                // Add after current
                 const newSeparators = [...separators];
                 const newInvertBgs = mode === 'separator' ? [...invertBgs] : [];
                 const defaultChar = presetSeparators[0]?.char ?? '\uE0B0';
@@ -207,8 +207,8 @@ export const PowerlineSeparatorEditor: React.FC<PowerlineSeparatorEditorProps> =
                     updateSeparators(newSeparators, newInvertBgs);
                     setSelectedIndex(selectedIndex + 1);
                 }
-            } else if ((input === 'i' || input === 'I') && (mode === 'separator' || separators.length < 3)) {
-                // Insert before current (max 3 for caps)
+            } else if (input === 'i' || input === 'I') {
+                // Insert before current
                 const newSeparators = [...separators];
                 const newInvertBgs = mode === 'separator' ? [...invertBgs] : [];
                 const defaultChar = presetSeparators[0]?.char ?? '\uE0B0';
@@ -270,7 +270,6 @@ export const PowerlineSeparatorEditor: React.FC<PowerlineSeparatorEditorProps> =
         }
     };
 
-    const canAdd = mode === 'separator' || separators.length < 3;
     const canDelete = mode !== 'separator' || separators.length > 1;
 
     return (
@@ -300,7 +299,7 @@ export const PowerlineSeparatorEditor: React.FC<PowerlineSeparatorEditorProps> =
                 <>
                     <Box>
                         <Text dimColor>
-                            {`↑↓ 选择，← → 切换${canAdd ? '，(a)添加，(i)插入' : ''}${canDelete ? '，(d)删除' : ''}，(c)清除，(h)十六进制${mode === 'separator' ? '，(t)反转切换' : ''}，ESC 返回`}
+                            {`↑↓ 选择，← → 切换，(a)添加，(i)插入${canDelete ? '，(d)删除' : ''}，(c)清除，(h)十六进制${mode === 'separator' ? '，(t)反转切换' : ''}，ESC 返回`}
                         </Text>
                     </Box>
 

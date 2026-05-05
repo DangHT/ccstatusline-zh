@@ -6,11 +6,7 @@ import type {
     WidgetEditorDisplay,
     WidgetItem
 } from '../types/Widget';
-import { getContextWindowMetrics } from '../utils/context-window';
-import {
-    getContextConfig,
-    getModelContextIdentifier
-} from '../utils/model-context';
+import { calculateContextPercentageMetrics } from '../utils/context-percentage';
 
 import {
     getContextInverseModifierText,
@@ -51,39 +47,22 @@ export class ContextPercentageWidget implements Widget {
 
     render(item: WidgetItem, context: RenderContext, settings: Settings): string | null {
         const isInverse = isContextInverse(item);
+        const label = isInverse ? '剩余: ' : '已用: ';
         const sliderMode = getContextSliderMode(item);
-        const contextWindowMetrics = getContextWindowMetrics(context.data);
-        const percentLabel = isInverse ? '剩余: ' : '已用: ';
-        const sliderLabel = 'Ctx: ';
+        const contextPercentageMetrics = calculateContextPercentageMetrics(context);
+
+        const formatContextPercentage = (displayPercentage: number): string => {
+            const sliderResult = renderContextSlider(sliderMode, displayPercentage);
+            return formatRawOrLabeledValue(item, label, sliderResult ?? `${displayPercentage.toFixed(1)}%`);
+        };
 
         if (context.isPreview) {
-            const previewPercent = isInverse ? 90.7 : 9.3;
-            const sliderResult = renderContextSlider(sliderMode, previewPercent);
-            if (sliderResult !== null) {
-                return formatRawOrLabeledValue(item, sliderLabel, sliderResult);
-            }
-            return formatRawOrLabeledValue(item, percentLabel, `${previewPercent.toFixed(1)}%`);
+            return formatContextPercentage(isInverse ? 90.7 : 9.3);
         }
 
-        if (contextWindowMetrics.usedPercentage !== null) {
-            const displayPercentage = isInverse ? (100 - contextWindowMetrics.usedPercentage) : contextWindowMetrics.usedPercentage;
-            const sliderResult = renderContextSlider(sliderMode, displayPercentage);
-            if (sliderResult !== null) {
-                return formatRawOrLabeledValue(item, sliderLabel, sliderResult);
-            }
-            return formatRawOrLabeledValue(item, percentLabel, `${displayPercentage.toFixed(1)}%`);
-        }
-
-        if (context.tokenMetrics) {
-            const modelIdentifier = getModelContextIdentifier(context.data?.model);
-            const contextConfig = getContextConfig(modelIdentifier, contextWindowMetrics.windowSize);
-            const usedPercentage = Math.min(100, (context.tokenMetrics.contextLength / contextConfig.maxTokens) * 100);
-            const displayPercentage = isInverse ? (100 - usedPercentage) : usedPercentage;
-            const sliderResult = renderContextSlider(sliderMode, displayPercentage);
-            if (sliderResult !== null) {
-                return formatRawOrLabeledValue(item, sliderLabel, sliderResult);
-            }
-            return formatRawOrLabeledValue(item, percentLabel, `${displayPercentage.toFixed(1)}%`);
+        if (contextPercentageMetrics !== null) {
+            const displayPercentage = isInverse ? (100 - contextPercentageMetrics.usedPercentage) : contextPercentageMetrics.usedPercentage;
+            return formatContextPercentage(displayPercentage);
         }
 
         return null;
