@@ -96,7 +96,7 @@ interface WidgetCatalogItem extends MenuItem {
 }
 
 const TUI_START_FRAME = 96;
-const COMMAND_TEXT = '$ npx ccstatusline@latest';
+const COMMAND_TEXT = '$ npx ccstatusline-zh@latest';
 
 const THEMES: Record<ThemeName, Theme> = {
     'custom': {
@@ -249,155 +249,155 @@ const THEME_ORDER: ThemeName[] = [
 
 const MAIN_MENU: MenuItem[] = [
     {
-        label: '📝 Edit Lines',
-        description: 'Configure any number of status lines with various widgets like model info, git status, and token usage'
+        label: '📝 编辑状态行',
+        description: '配置多行状态栏，添加模型信息、Git 状态、Token 用量等组件'
     },
     {
-        label: '🎨 Edit Colors',
-        description: 'Customize colors for each widget including foreground, background, and bold styling'
+        label: '🎨 编辑颜色',
+        description: '为每个组件自定义前景色、背景色和加粗样式'
     },
     {
-        label: '⚡ Powerline Setup',
-        description: 'Install Powerline fonts for enhanced visual separators and symbols in your status line'
-    },
-    { label: '', separator: true },
-    {
-        label: '💻 Terminal Options',
-        description: 'Configure terminal-specific settings for optimal display'
-    },
-    {
-        label: '🌐 Global Overrides',
-        description: 'Set global padding, separators, and color overrides that apply to all widgets'
+        label: '⚡ Powerline 设置',
+        description: '安装 Powerline 字体以获得更美观的分隔符和符号'
     },
     { label: '', separator: true },
     {
-        label: '📦 Install to Claude Code',
-        description: 'Add ccstatusline to your Claude Code settings for automatic status line rendering'
+        label: '💻 终端选项',
+        description: '配置终端特定设置以获得最佳显示效果'
     },
     {
-        label: '🚪 Exit',
-        description: 'Exit the configuration tool'
+        label: '🌐 全局覆盖',
+        description: '设置适用于所有组件的全局内边距、分隔符和颜色覆盖'
     },
     { label: '', separator: true },
     {
-        label: '⭐ Like ccstatusline? Star us on GitHub',
-        description: 'Open the ccstatusline GitHub repository in your browser so you can star the project'
+        label: '📦 安装到 Claude Code',
+        description: '将 ccstatusline-zh 添加到 Claude Code 设置以自动渲染状态栏'
+    },
+    {
+        label: '🚪 退出',
+        description: '退出配置工具'
+    },
+    { label: '', separator: true },
+    {
+        label: '⭐ 喜欢 ccstatusline-zh？来 GitHub 给个 Star',
+        description: '在浏览器中打开 ccstatusline-zh GitHub 仓库以 Star 本项目'
     }
 ];
 
 const FINAL_MENU: MenuItem[] = [
     ...MAIN_MENU.slice(0, 8),
     {
-        label: '💾 Save & Exit',
-        description: 'Save all changes and exit the configuration tool'
+        label: '💾 保存并退出',
+        description: '保存所有更改并退出配置工具'
     },
     {
-        label: '❌ Exit without saving',
-        description: 'Exit without saving your changes'
+        label: '❌ 不保存退出',
+        description: '放弃更改并退出'
     },
     { label: '', separator: true },
-    MAIN_MENU[10] ?? { label: '⭐ Like ccstatusline? Star us on GitHub' }
+    MAIN_MENU[10] ?? { label: '⭐ 喜欢 ccstatusline-zh？来 GitHub 给个 Star' }
 ];
 
 const LINE_ONE_WIDGETS: EditorWidget[] = [
     {
-        displayText: 'Model',
-        description: 'Displays the Claude model name (e.g., Claude 3.5 Sonnet)'
+        displayText: '模型',
+        description: '显示当前 Claude 模型名称（如 Claude 3.5 Sonnet）'
     },
     {
-        displayText: 'Context Length',
-        description: 'Shows the current context window size in tokens'
+        displayText: '上下文长度',
+        description: '显示当前上下文窗口大小（Token 数）'
     },
     {
-        displayText: 'Git Branch',
-        description: 'Shows the current git branch name'
+        displayText: 'Git 分支',
+        description: '显示当前 Git 分支名'
     },
     {
-        displayText: 'Git Changes',
-        description: 'Shows git changes count (+insertions, -deletions)'
+        displayText: 'Git 变更',
+        description: '显示 Git 变更数（+新增, -删除）'
     },
     {
-        displayText: 'Tokens Total',
-        description: 'Shows total token count (input + output + cache) for the current session'
+        displayText: '总 Token',
+        description: '显示当前会话的总 Token 数（输入 + 输出 + 缓存）'
     },
     {
-        displayText: 'Session Cost',
-        description: 'Shows the total session cost in USD'
+        displayText: '会话费用',
+        description: '显示当前会话总费用（美元）'
     }
 ];
 
 const LINE_TWO_WIDGETS: EditorWidget[] = [
     {
-        displayText: 'Session Usage',
-        description: 'Shows daily/session API usage percentage'
+        displayText: '会话用量',
+        description: '显示每日/会话 API 用量百分比'
     },
     {
-        displayText: 'Weekly Usage',
-        description: 'Shows weekly API usage percentage'
+        displayText: '周用量',
+        description: '显示每周 API 用量百分比'
     },
     {
-        displayText: 'Block Reset Timer',
-        description: 'Shows time remaining until current 5hr block reset window'
+        displayText: '时段重置计时',
+        description: '显示当前 5 时时段重置窗口的剩余时间'
     },
     {
-        displayText: 'Weekly Reset Timer',
-        description: 'Shows time remaining until weekly usage reset'
+        displayText: '周重置计时',
+        description: '显示周用量重置倒计时'
     }
 ];
 
 const WIDGET_CATEGORIES: MenuItem[] = [
     {
-        label: 'All',
-        description: 'Search across all widget categories.'
+        label: '全部',
+        description: '在所有组件分类中搜索。'
     },
-    { label: 'Core' },
+    { label: '核心' },
     { label: 'Git' },
     { label: 'Jujutsu' },
-    { label: 'Environment' },
-    { label: 'Tokens' },
-    { label: 'Token Speed' },
-    { label: 'Context' },
-    { label: 'Session' },
-    { label: 'Usage' },
-    { label: 'Custom' },
-    { label: 'Layout' }
+    { label: '环境' },
+    { label: 'Token' },
+    { label: 'Token 速度' },
+    { label: '上下文' },
+    { label: '会话' },
+    { label: '用量' },
+    { label: '自定义' },
+    { label: '布局' }
 ];
 
 const WIDGET_CATALOG: WidgetCatalogItem[] = [
-    makeCatalogItem('model', 'Model', 'Displays the Claude model name (e.g., Claude 3.5 Sonnet)', 'Core'),
-    makeCatalogItem('output-style', 'Output Style', 'Shows the current Claude Code output style', 'Core'),
-    makeCatalogItem('version', 'Version', 'Shows the Claude Code version', 'Core'),
-    makeCatalogItem('thinking-effort', 'Thinking Effort', 'Shows the active thinking effort setting', 'Core'),
-    makeCatalogItem('git-branch', 'Git Branch', 'Shows the current git branch', 'Git'),
-    makeCatalogItem('git-changes', 'Git Changes', 'Shows git changes count (+insertions, -deletions)', 'Git'),
-    makeCatalogItem('git-status', 'Git Status', 'Shows concise git repository status', 'Git'),
-    makeCatalogItem('jj-description', 'Jujutsu Description', 'Shows the current Jujutsu change description', 'Jujutsu'),
-    makeCatalogItem('current-working-dir', 'Current Working Dir', 'Shows the current working directory', 'Environment'),
-    makeCatalogItem('terminal-width', 'Terminal Width', 'Shows the detected terminal width', 'Environment'),
-    makeCatalogItem('tokens-input', 'Tokens Input', 'Shows input token count for the current session', 'Tokens'),
-    makeCatalogItem('tokens-output', 'Tokens Output', 'Shows output token count for the current session', 'Tokens'),
-    makeCatalogItem('tokens-cached', 'Tokens Cached', 'Shows cached token count for the current session', 'Tokens'),
-    makeCatalogItem('tokens-total', 'Tokens Total', 'Shows total token count (input + output + cache) for the current session', 'Tokens'),
-    makeCatalogItem('input-speed', 'Input Speed', 'Shows input token processing speed', 'Token Speed'),
-    makeCatalogItem('output-speed', 'Output Speed', 'Shows output token generation speed', 'Token Speed'),
-    makeCatalogItem('total-speed', 'Total Speed', 'Shows total token processing speed', 'Token Speed'),
-    makeCatalogItem('context-length', 'Context Length', 'Shows the current context window size in tokens', 'Context'),
-    makeCatalogItem('context-percentage', 'Context Percentage', 'Shows percentage of context window used', 'Context'),
-    makeCatalogItem('context-bar', 'Context Bar', 'Shows context usage as a progress bar', 'Context'),
-    makeCatalogItem('session-clock', 'Session Clock', 'Shows elapsed time since current session started', 'Session'),
-    makeCatalogItem('session-cost', 'Session Cost', 'Shows the total session cost in USD', 'Session'),
-    makeCatalogItem('block-timer', 'Block Timer', 'Shows current 5hr block elapsed time or progress', 'Usage'),
-    makeCatalogItem('session-usage', 'Session Usage', 'Shows daily/session API usage percentage', 'Usage'),
-    makeCatalogItem('weekly-usage', 'Weekly Usage', 'Shows weekly API usage percentage', 'Usage'),
-    makeCatalogItem('weekly-sonnet-usage', 'Weekly Sonnet Usage', 'Shows weekly Sonnet API usage percentage', 'Usage'),
-    makeCatalogItem('weekly-opus-usage', 'Weekly Opus Usage', 'Shows weekly Opus API usage percentage', 'Usage'),
-    makeCatalogItem('reset-timer', 'Block Reset Timer', 'Shows time remaining until current 5hr block reset window', 'Usage'),
-    makeCatalogItem('weekly-reset-timer', 'Weekly Reset Timer', 'Shows time remaining until weekly usage reset', 'Usage'),
-    makeCatalogItem('custom-text', 'Custom Text', 'Displays custom static text', 'Custom'),
-    makeCatalogItem('custom-symbol', 'Custom Symbol', 'Displays a custom symbol', 'Custom'),
-    makeCatalogItem('custom-command', 'Custom Command', 'Runs a custom shell command and displays output', 'Custom'),
-    makeCatalogItem('separator', 'Separator', 'A separator character between status line widgets', 'Layout'),
-    makeCatalogItem('flex-separator', 'Flex Separator', 'Expands to fill available terminal width', 'Layout')
+    makeCatalogItem('model', '模型', '显示当前 Claude 模型名称（如 Claude 3.5 Sonnet）', '核心'),
+    makeCatalogItem('output-style', '输出风格', '显示当前 Claude Code 输出风格', '核心'),
+    makeCatalogItem('version', '版本', '显示 Claude Code CLI 版本号', '核心'),
+    makeCatalogItem('thinking-effort', '思考力度', '显示当前思考力度级别（low、medium、high、xhigh、max）', '核心'),
+    makeCatalogItem('git-branch', 'Git 分支', '显示当前 Git 分支名', 'Git'),
+    makeCatalogItem('git-changes', 'Git 变更', '显示 Git 变更数（+新增, -删除）', 'Git'),
+    makeCatalogItem('git-status', 'Git 状态', '显示 Git 状态指示：+ 已暂存, * 未暂存, ? 未跟踪, ! 冲突', 'Git'),
+    makeCatalogItem('jj-description', 'JJ 变更描述', '显示当前 Jujutsu 变更描述', 'Jujutsu'),
+    makeCatalogItem('current-working-dir', '当前目录', '显示当前工作目录', '环境'),
+    makeCatalogItem('terminal-width', '终端宽度', '显示当前终端宽度（列数）', '环境'),
+    makeCatalogItem('tokens-input', '输入 Token', '显示当前会话的输入 Token 数', 'Token'),
+    makeCatalogItem('tokens-output', '输出 Token', '显示当前会话的输出 Token 数', 'Token'),
+    makeCatalogItem('tokens-cached', '缓存 Token', '显示当前会话的缓存 Token 数', 'Token'),
+    makeCatalogItem('tokens-total', '总 Token', '显示当前会话的总 Token 数（输入 + 输出 + 缓存）', 'Token'),
+    makeCatalogItem('input-speed', '输入速度', '显示会话平均输入 Token 速度（tokens/sec）', 'Token 速度'),
+    makeCatalogItem('output-speed', '输出速度', '显示会话平均输出 Token 速度（tokens/sec）', 'Token 速度'),
+    makeCatalogItem('total-speed', '总速度', '显示会话平均总 Token 速度（tokens/sec）', 'Token 速度'),
+    makeCatalogItem('context-length', '上下文长度', '显示当前上下文窗口大小（Token 数）', '上下文'),
+    makeCatalogItem('context-percentage', '上下文 %', '显示上下文窗口已用或剩余百分比', '上下文'),
+    makeCatalogItem('context-bar', '上下文进度条', '以进度条形式显示上下文用量', '上下文'),
+    makeCatalogItem('session-clock', '会话时钟', '显示当前会话已经过的时间', '会话'),
+    makeCatalogItem('session-cost', '会话费用', '显示当前会话总费用（美元）', '会话'),
+    makeCatalogItem('block-timer', '时段计时器', '显示当前 5 时时段的已用时间或进度', '用量'),
+    makeCatalogItem('session-usage', '会话用量', '显示每日/会话 API 用量百分比', '用量'),
+    makeCatalogItem('weekly-usage', '周用量', '显示每周 API 用量百分比', '用量'),
+    makeCatalogItem('weekly-sonnet-usage', '周 Sonnet 用量', '显示每周 Sonnet API 用量百分比', '用量'),
+    makeCatalogItem('weekly-opus-usage', '周 Opus 用量', '显示每周 Opus API 用量百分比', '用量'),
+    makeCatalogItem('reset-timer', '时段重置计时', '显示当前 5 时时段重置窗口的剩余时间', '用量'),
+    makeCatalogItem('weekly-reset-timer', '周重置计时', '显示周用量重置倒计时', '用量'),
+    makeCatalogItem('custom-text', '自定义文本', '显示用户自定义文本', '自定义'),
+    makeCatalogItem('custom-symbol', '自定义符号', '显示自定义符号或 Emoji（单个字符）', '自定义'),
+    makeCatalogItem('custom-command', '自定义命令', '执行自定义 Shell 命令并显示输出', '自定义'),
+    makeCatalogItem('separator', '分隔符', '状态栏组件之间的分隔符', '布局'),
+    makeCatalogItem('flex-separator', '弹性分隔符', '扩展以填充可用终端宽度', '布局')
 ];
 
 function makeCatalogItem(
@@ -417,23 +417,23 @@ function makeCatalogItem(
 
 const POWERLINE_ITEMS: MenuItem[] = [
     {
-        label: 'Separator',
-        description: 'Choose the glyph used between powerline segments.'
+        label: '分隔符',
+        description: '选择 Powerline 段之间使用的字形。'
     },
     {
-        label: 'Start Cap',
-        description: 'Configure the cap glyph that appears at the start of each powerline line.'
+        label: '起始端帽',
+        description: '配置每行 Powerline 起始位置显示的端帽字形。'
     },
     {
-        label: 'End Cap',
-        description: 'Configure the cap glyph that appears at the end of each powerline line.'
+        label: '结束端帽',
+        description: '配置每行 Powerline 结束位置显示的端帽字形。'
     },
     {
-        label: 'Themes',
-        description: 'Preview built-in powerline themes or copy a theme into custom widget colors.'
+        label: '主题',
+        description: '预览内置 Powerline 主题或将主题复制到自定义组件颜色中。'
     },
     { label: '', separator: true },
-    { label: '← Back' }
+    { label: '← 返回' }
 ];
 
 function clampProgress(
@@ -596,14 +596,14 @@ function getPhase(frame: number): Phase {
             lineNumber: 1,
             selectedItemIndex: 0,
             pickerLevel: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: '',
             keys: ['a']
         });
     }
 
     if (frame < 335) {
-        const query = 'tokens total';
+        const query = '总 Token';
 
         return makePhase({
             title: 'Search Tokens Total',
@@ -611,7 +611,7 @@ function getPhase(frame: number): Phase {
             lineNumber: 1,
             selectedItemIndex: 0,
             pickerLevel: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: getTypedText(frame, 302, 330, query),
             keys: getTypingKeys(frame, 302, 330, query)
         });
@@ -629,7 +629,7 @@ function getPhase(frame: number): Phase {
     }
 
     if (frame < 400) {
-        const query = 'session cost';
+        const query = '会话费用';
 
         return makePhase({
             title: 'Search Session Cost',
@@ -638,7 +638,7 @@ function getPhase(frame: number): Phase {
             selectedItemIndex: 0,
             lineOneWidgetCount: 5,
             pickerLevel: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: getTypedText(frame, 374, 396, query),
             keys: getTypingKeys(frame, 374, 396, query, 'a')
         });
@@ -694,7 +694,7 @@ function getPhase(frame: number): Phase {
             lineOneWidgetCount: 6,
             lineNumber: 2,
             pickerLevel: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             keys: ['a']
         });
     }
@@ -704,7 +704,7 @@ function getPhase(frame: number): Phase {
             9,
             Math.floor((frame - 525) / 4) + 1
         );
-        const selectedCategory = WIDGET_CATEGORIES[categoryIndex]?.label ?? 'Usage';
+        const selectedCategory = WIDGET_CATEGORIES[categoryIndex]?.label ?? '用量';
 
         return makePhase({
             screen: 'picker',
@@ -724,7 +724,7 @@ function getPhase(frame: number): Phase {
             lineOneWidgetCount: 6,
             lineNumber: 2,
             pickerLevel: 'category',
-            selectedCategory: 'Usage',
+            selectedCategory: '用量',
             keys: ['Enter']
         });
     }
@@ -736,7 +736,7 @@ function getPhase(frame: number): Phase {
             lineOneWidgetCount: 6,
             lineNumber: 2,
             pickerLevel: 'widget',
-            selectedCategory: 'Usage',
+            selectedCategory: '用量',
             selectedItemIndex: 0,
             keys: []
         });
@@ -749,7 +749,7 @@ function getPhase(frame: number): Phase {
             lineOneWidgetCount: 6,
             lineNumber: 2,
             pickerLevel: 'widget',
-            selectedCategory: 'Usage',
+            selectedCategory: '用量',
             selectedItemIndex: 1,
             keys: ['Down']
         });
@@ -762,7 +762,7 @@ function getPhase(frame: number): Phase {
             lineOneWidgetCount: 6,
             lineNumber: 2,
             pickerLevel: 'widget',
-            selectedCategory: 'Usage',
+            selectedCategory: '用量',
             selectedItemIndex: 2,
             keys: ['Down']
         });
@@ -775,7 +775,7 @@ function getPhase(frame: number): Phase {
             lineOneWidgetCount: 6,
             lineNumber: 2,
             pickerLevel: 'widget',
-            selectedCategory: 'Usage',
+            selectedCategory: '用量',
             selectedItemIndex: 2,
             keys: ['Enter']
         });
@@ -795,7 +795,7 @@ function getPhase(frame: number): Phase {
     }
 
     if (frame < 675) {
-        const query = 'weekly usage';
+        const query = '周用量';
 
         return makePhase({
             title: 'Search Weekly Usage',
@@ -805,7 +805,7 @@ function getPhase(frame: number): Phase {
             lineNumber: 2,
             lineTwoWidgetCount: 1,
             pickerLevel: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: getTypedText(frame, 649, 671, query),
             selectedItemIndex: 0,
             keys: getTypingKeys(frame, 649, 671, query, 'a')
@@ -826,7 +826,7 @@ function getPhase(frame: number): Phase {
     }
 
     if (frame < 735) {
-        const query = 'block reset';
+        const query = '时段重置计时';
 
         return makePhase({
             title: 'Search Block Reset Timer',
@@ -836,7 +836,7 @@ function getPhase(frame: number): Phase {
             lineNumber: 2,
             lineTwoWidgetCount: 2,
             pickerLevel: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: getTypedText(frame, 709, 731, query),
             selectedItemIndex: 0,
             keys: getTypingKeys(frame, 709, 731, query, 'a')
@@ -857,7 +857,7 @@ function getPhase(frame: number): Phase {
     }
 
     if (frame < 795) {
-        const query = 'weekly reset';
+        const query = '周重置计时';
 
         return makePhase({
             title: 'Search Weekly Reset Timer',
@@ -867,7 +867,7 @@ function getPhase(frame: number): Phase {
             lineNumber: 2,
             lineTwoWidgetCount: 3,
             pickerLevel: 'category',
-            selectedCategory: 'All',
+            selectedCategory: '全部',
             categoryQuery: getTypedText(frame, 769, 791, query),
             selectedItemIndex: 0,
             keys: getTypingKeys(frame, 769, 791, query, 'a')
@@ -1334,7 +1334,7 @@ function TerminalWindow({
                     <span style={{ ...styles.dot, backgroundColor: '#FFBD2E' }} />
                     <span style={{ ...styles.dot, backgroundColor: '#28C840' }} />
                 </div>
-                <div style={styles.windowTitle}>ccstatusline - npx ccstatusline@latest</div>
+                <div style={styles.windowTitle}>ccstatusline-zh - npx ccstatusline-zh@latest</div>
             </div>
             <div style={styles.terminalBody}>
                 {!launched ? (
@@ -1418,7 +1418,7 @@ function LaunchCommand({ frame }: { frame: number }) {
                 )}
             </div>
             {executed && (
-                <div style={styles.launchDimText}>Starting ccstatusline...</div>
+                <div style={styles.launchDimText}>正在启动 ccstatusline-zh...</div>
             )}
         </div>
     );
@@ -1432,19 +1432,19 @@ function TuiScreen({ phase }: { phase: Phase }) {
     return (
         <>
             <div style={styles.tuiHeader}>
-                <span style={styles.tuiTitle}>CCStatusline Configuration</span>
+                <span style={styles.tuiTitle}>CCStatusline 配置</span>
                 <span style={styles.version}>
                     &nbsp;|&nbsp;v
                     {PACKAGE_VERSION}
                 </span>
                 {phase.screen === 'final' && (
-                    <span style={styles.savedMessage}>  ✓ Configuration saved</span>
+                    <span style={styles.savedMessage}>  ✓ 配置已保存</span>
                 )}
             </div>
             <div style={styles.previewBox}>
                 <div style={styles.previewHeader}>
                     <span style={styles.promptChar}>&gt;</span>
-                    <span> Preview  (ctrl+s to save configuration at any time)</span>
+                    <span> 预览  （随时按 ctrl+s 保存配置）</span>
                 </div>
             </div>
             <div style={styles.previewLines}>
@@ -1624,7 +1624,7 @@ function MainScreen({
 }) {
     return (
         <div>
-            <div style={styles.screenTitle}>Main Menu</div>
+            <div style={styles.screenTitle}>主菜单</div>
             <MenuList
                 items={items}
                 selectedIndex={selectedIndex}
@@ -1638,22 +1638,22 @@ function LineSelectorScreen({ phase }: { phase: Phase }) {
     const secondLineWidgets = phase.lineTwoWidgetCount;
     const items: MenuItem[] = [
         {
-            label: '☰ Line 1',
-            sublabel: `(${firstLineWidgets} widgets)`
+            label: '☰ 第 1 行',
+            sublabel: `(${firstLineWidgets} 个组件)`
         },
         {
-            label: '☰ Line 2',
-            sublabel: secondLineWidgets > 0 ? '(4 widgets)' : '(empty)'
+            label: '☰ 第 2 行',
+            sublabel: secondLineWidgets > 0 ? '(4 个组件)' : '(空)'
         },
         { label: '', separator: true },
-        { label: '← Back' }
+        { label: '← 返回' }
     ];
 
     return (
         <div>
-            <div style={styles.screenTitle}>Select Line to Edit Items </div>
-            <div style={styles.helpText}>Choose which status line to configure</div>
-            <div style={styles.helpText}>(a) to append new line, (d) to delete line, (m) to move line, ESC to go back</div>
+            <div style={styles.screenTitle}>选择要编辑组件的行</div>
+            <div style={styles.helpText}>选择要配置的状态栏行</div>
+            <div style={styles.helpText}>(a) 添加新行，(d) 删除行，(m) 移动行，ESC 返回</div>
             <MenuList
                 items={items}
                 selectedIndex={phase.selectedLineIndex}
@@ -1670,19 +1670,19 @@ function ItemsScreen({ phase }: { phase: Phase }) {
     return (
         <div>
             <div style={styles.screenTitle}>
-                Edit Line
+                编辑行
                 {' '}
                 {phase.lineNumber}
                 {' '}
                 {phase.powerline && (
-                    <span style={styles.inlineWarning}>⚠ Powerline mode active: separators controlled by powerline settings</span>
+                    <span style={styles.inlineWarning}>⚠ Powerline 模式已启用：分隔符由 Powerline 设置控制</span>
                 )}
             </div>
             <div style={styles.helpText}>{help.main}</div>
             <div style={styles.helpText}>{help.custom}</div>
             <div style={styles.helpSpacer}> </div>
             {widgets.length === 0 ? (
-                <div style={styles.emptyLine}>No widgets. Press 'a' to add one.</div>
+                <div style={styles.emptyLine}>暂无组件。按 'a' 添加。</div>
             ) : (
                 <div style={styles.menuList}>
                     {widgets.map((widget, index) => {
@@ -1742,19 +1742,19 @@ function getWidgetModifierText(phase: Phase, index: number): string | undefined 
 
 function getUsageModifierText(mode: UsageDisplayMode): string | undefined {
     if (mode === 'progress') {
-        return '(long bar)';
+        return '(长进度条)';
     }
 
     if (mode === 'progress-short') {
-        return '(medium bar)';
+        return '(中进度条)';
     }
 
     if (mode === 'slider') {
-        return '(short bar)';
+        return '(短进度条)';
     }
 
     if (mode === 'slider-only') {
-        return '(short bar only)';
+        return '(仅短进度条)';
     }
 
     return undefined;
@@ -1766,14 +1766,14 @@ function getItemsHelpText(
 ): { main: string; custom: string } {
     if (widgets.length === 0) {
         return {
-            main: '(a)dd via picker, (i)nsert via picker, ESC back',
+            main: '(a)添加, (i)插入, ESC 返回',
             custom: ' '
         };
     }
 
-    let main = '↑↓ select, ←→ open type picker, Enter to move, (a)dd via picker, (i)nsert via picker, (k) clone, (d)elete, (c)lear line';
-    main += ', (r)aw value';
-    main += ', ESC back';
+    let main = '↑↓ 选择, ←→ 打开类型选择器, Enter 移动, (a)添加, (i)插入, (k)克隆, (d)删除, (c)清空行';
+    main += ', (r)纯值';
+    main += ', ESC 返回';
 
     return {
         main,
@@ -1795,11 +1795,11 @@ function getCustomKeybindsText(phase: Phase): string {
     }
 
     if (phase.selectedItemIndex === 2) {
-        return '(p)rogress toggle, (s)hort time, (t)imestamp';
+        return '(p)进度条切换, (s)短时间, (t)时间戳';
     }
 
     if (phase.selectedItemIndex === 3) {
-        return '(p)rogress toggle, (s)hort time, (t)imestamp, (h)ours only';
+        return '(p)进度条切换, (s)短时间, (t)时间戳, (h)仅小时';
     }
 
     return '';
@@ -1807,14 +1807,14 @@ function getCustomKeybindsText(phase: Phase): string {
 
 function getUsagePercentKeybindsText(mode: UsageDisplayMode): string {
     if (mode === 'time') {
-        return '(p)rogress toggle';
+        return '(p)进度条切换';
     }
 
-    return '(p)rogress toggle, in(v)ert fill, (t)ime cursor';
+    return '(p)进度条切换, (v)反转填充, (t)时间游标';
 }
 
 function WidgetPicker({ phase }: { phase: Phase }) {
-    const pickerActionLabel = 'Add Widget';
+    const pickerActionLabel = '添加组件';
     const pickerLevel = phase.pickerLevel ?? 'category';
     const categoryQuery = phase.categoryQuery ?? '';
     const widgetQuery = phase.widgetQuery ?? '';
@@ -1838,37 +1838,37 @@ function WidgetPicker({ phase }: { phase: Phase }) {
     return (
         <div>
             <div style={styles.screenTitle}>
-                Edit Line
+                编辑行
                 {' '}
                 {phase.lineNumber}
                 {' '}
-                <span style={styles.modePill}>{`[${pickerActionLabel.toUpperCase()}]`}</span>
+                <span style={styles.modePill}>{`[${pickerActionLabel}]`}</span>
             </div>
             {pickerLevel === 'category' ? (
                 <>
                     <div style={styles.helpText}>
                         {categoryQuery.trim().length > 0
-                            ? '↑↓ select widget match, Enter apply, ESC clear/cancel'
-                            : '↑↓ select category, type to search all widgets, Enter continue, ESC cancel'}
+                            ? '↑↓ 选择匹配组件，Enter 确认，ESC 清除/取消'
+                            : '↑↓ 选择分类，输入搜索所有组件，Enter 继续，ESC 取消'}
                     </div>
                     <div style={styles.searchLine}>
-                        <span style={styles.dimText}>Search: </span>
-                        <span style={styles.searchValue}>{categoryQuery || '(none)'}</span>
+                        <span style={styles.dimText}>搜索: </span>
+                        <span style={styles.searchValue}>{categoryQuery || '（无）'}</span>
                     </div>
                 </>
             ) : (
                 <>
-                    <div style={styles.helpText}>↑↓ select widget, type to search widgets, Enter apply, ESC back</div>
+                    <div style={styles.helpText}>↑↓ 选择组件，输入搜索，Enter 确认，ESC 返回</div>
                     <div style={styles.searchLine}>
                         <span style={styles.dimText}>
-                            Category:
+                            分类:
                             {' '}
                             {selectedCategory}
                             {' '}
-                            | Search:
+                            | 搜索:
                             {' '}
                         </span>
-                        <span style={styles.searchValue}>{widgetQuery || '(none)'}</span>
+                        <span style={styles.searchValue}>{widgetQuery || '（无）'}</span>
                     </div>
                 </>
             )}
@@ -1918,7 +1918,7 @@ function getPickerItems(
             return WIDGET_CATEGORIES;
         }
 
-        return filterDemoWidgetCatalog('All', categoryQuery);
+        return filterDemoWidgetCatalog('全部', categoryQuery);
     }
 
     return filterDemoWidgetCatalog(selectedCategory, widgetQuery);
@@ -1928,7 +1928,7 @@ function filterDemoWidgetCatalog(
     category: string,
     query: string
 ): WidgetCatalogItem[] {
-    const categoryFiltered = category === 'All'
+    const categoryFiltered = category === '全部'
         ? [...WIDGET_CATALOG]
         : WIDGET_CATALOG.filter(entry => entry.category === category);
     const records: FuzzySearchRecord<WidgetCatalogItem>[] = categoryFiltered.map(entry => ({
@@ -1978,40 +1978,40 @@ function PowerlineScreen({ phase }: { phase: Phase }) {
 
     return (
         <div>
-            <div style={styles.screenTitle}>Powerline Setup</div>
+            <div style={styles.screenTitle}>Powerline 设置</div>
             <PowerlineSettingRow
-                label='Font Status'
-                status='✓ Installed'
+                label='字体状态'
+                status='✓ 已安装'
                 statusStyle={styles.goodText}
-                detail='Ensure fonts are active in your terminal'
+                detail='请确保终端中已激活字体'
             />
             <PowerlineSettingRow
-                label='Powerline Mode'
-                status={phase.powerline ? '✓ Enabled' : '✗ Disabled'}
+                label='Powerline 模式'
+                status={phase.powerline ? '✓ 已启用' : '✗ 已禁用'}
                 statusStyle={phase.powerline ? styles.goodText : styles.badText}
-                detail='Press (t) to toggle'
+                detail='按 (t) 切换'
             />
             {phase.powerline ? (
                 <>
                     <PowerlineSettingRow
-                        label='Align Widgets'
-                        status='✓ Enabled'
+                        label='对齐组件'
+                        status='✓ 已启用'
                         statusStyle={styles.goodText}
-                        detail='Press (a) to toggle'
+                        detail='按 (a) 切换'
                     />
                     <PowerlineSettingRow
-                        label='Continue Theme'
-                        status='✗ Disabled'
+                        label='主题色延续'
+                        status='✗ 已禁用'
                         statusStyle={styles.badText}
-                        detail='Press (c) to toggle'
+                        detail='按 (c) 切换'
                     />
                     <div style={styles.powerlineNotes}>
-                        <div>When enabled, global overrides are disabled and powerline separators are used</div>
-                        <div>Continue Theme keeps the Powerline color sequence running across lines</div>
+                        <div>启用后，全局覆盖将被禁用，并使用 Powerline 分隔符</div>
+                        <div>主题色延续：Powerline 颜色序列跨多行状态栏连续延续</div>
                     </div>
                 </>
             ) : (
-                <div style={styles.powerlineNotes}>Enable Powerline mode to configure separators, caps, and themes.</div>
+                <div style={styles.powerlineNotes}>启用 Powerline 模式以配置分隔符、端帽和主题。</div>
             )}
             <PowerlineMenuList
                 items={items}
@@ -2025,16 +2025,16 @@ function getPowerlineMenuItems(phase: Phase): MenuItem[] {
     const disabled = !phase.powerline;
 
     return POWERLINE_ITEMS.map((item) => {
-        if (item.separator || item.label === '← Back') {
+        if (item.separator || item.label === '← 返回') {
             return item;
         }
 
-        const sublabel = item.label === 'Separator'
-            ? '( - Triangle Right)'
-            : item.label === 'Start Cap'
-                ? '(multiple)'
-                : item.label === 'End Cap'
-                    ? '( - Triangle)'
+        const sublabel = item.label === '分隔符'
+            ? '( - 右三角)'
+            : item.label === '起始端帽'
+                ? '(多个)'
+                : item.label === '结束端帽'
+                    ? '( - 三角)'
                     : `(${getPowerlineThemeDisplay(phase.selectedTheme)})`;
 
         return {
@@ -2127,22 +2127,22 @@ function PowerlineMenuList({
 }
 
 function PowerlineMenuValue({ item }: { item: MenuItem }) {
-    if (item.label === 'Separator') {
+    if (item.label === '分隔符') {
         return (
             <>
                 <span>(</span>
                 <PowerlineInlineGlyph />
-                <span> - Triangle Right)</span>
+                <span> - 右三角)</span>
             </>
         );
     }
 
-    if (item.label === 'End Cap') {
+    if (item.label === '结束端帽') {
         return (
             <>
                 <span>(</span>
                 <PowerlineInlineGlyph />
-                <span> - Triangle)</span>
+                <span> - 三角)</span>
             </>
         );
     }
