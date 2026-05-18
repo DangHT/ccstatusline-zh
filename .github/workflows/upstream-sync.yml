@@ -8,7 +8,8 @@ name: Upstream auto-sync
 # 合并后由 release.yml 负责发布（npm publish 前有一道人工审批 gate）。
 #
 # 需要的仓库配置：
-#   - Secret  ANTHROPIC_API_KEY  —— headless Claude Code 鉴权
+#   - Secret  CLAUDE_CODE_OAUTH_TOKEN  —— headless Claude Code 鉴权
+#     （本地 `claude setup-token` 用 Pro/Max 订阅生成，无需 API 付费额度）
 #   - Settings → General → 勾选 "Allow auto-merge"
 #   - main 分支保护：要求 Build / Lint & Type Check / Test 三个 check 通过
 #     （否则 auto-merge 会在 CI 出结果前就直接合）
@@ -89,7 +90,7 @@ jobs:
       - name: Run Claude Code sync
         uses: anthropic/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
           claude_args: '--allowedTools Bash,Read,Edit,Write,Grep,Glob'
           prompt: |
