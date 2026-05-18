@@ -74,46 +74,54 @@ argument-hint: "<upstream-tag, e.g. v2.2.17>"
 
 确认 `$ARGUMENTS` 是合法的上游 tag（形如 `v2.2.17`）。如果用户传的是版本号没带 `v`，加上。
 
+> **为什么用 git cherry-pick 而不是 jj rebase**：本 fork 的历史是「每次同步
+> squash 成一个 `feat: 同步上游 …` 提交」，与上游的 merge-base 停在很早的位置。
+> 直接 `jj rebase -d main@upstream` / `git rebase` 会把 fork 全部历史重放到上游
+> 之上，产生大量虚假冲突。正确做法是只 cherry-pick 上游「上次同步点 → 目标 tag」
+> 这一段增量。
+
 ### 步骤 1：拉上游 + 起 sync 分支
 
 ```bash
-jj git fetch --remote upstream
-jj log -r 'main@upstream' --no-pager  # 确认上游 main 已更新到目标 commit
+git remote get-url upstream >/dev/null 2>&1 || \
+  git remote add upstream https://github.com/sirmalloc/ccstatusline.git
+git fetch upstream --tags
+git checkout -b sync/upstream-$(date +%Y-%m-%d) origin/main
 ```
 
-如果当前 `@` 已有未提交改动，先 `jj describe -m "wip"` 收一下，避免污染 sync 分支。
+### 步骤 2：定位增量并 cherry-pick
+
+fork 的 `package.json` version 对应上游某个版本。在 `upstream/main` 历史里按
+package.json version 找到 fork 上次同步到的那个上游 commit，作为 cherry-pick 起点：
 
 ```bash
-jj new main -m "sync $ARGUMENTS"
-jj bookmark create sync/upstream-$(date +%Y-%m-%d) -r @
+# 逐个 commit 看 package.json version，找到等于 fork 当前版本的最后一个 commit
+git log --oneline <range> -- package.json
+git show <commit>:package.json | grep '"version"'
 ```
 
-### 步骤 2：rebase 到上游 main
+确定起点 `<base>` 后取增量（注意上游 PR 多为 squash，一般没有 merge commit）：
 
 ```bash
-jj rebase -d main@upstream
-jj log  # 看哪些 change 有冲突
+git log --oneline --reverse <base>..$ARGUMENTS   # 先看清这次要同步哪些提交
+git cherry-pick <base>..$ARGUMENTS
 ```
-
-**jj 会一次完成所有 commit 的 rebase，不会停在第一个冲突上**。冲突存在 commit
-里，可以延后解决，也可以挑顺序。
 
 ### 步骤 3：解冲突
 
-每个带冲突的 commit，决策规则：
+cherry-pick 在每个有冲突的 commit 停下。决策规则：
 
 1. **文件 fork 仅改了 UI 字符串，上游也只改了同一处字符串** → 保留 fork 中文版
 2. **文件上游加了新逻辑 + fork 仅改了字符串** → 合并：保留新逻辑 + 把新加的英文按术语表翻译
 3. **文件是上游新增的（fork 还没有）** → 取上游版本，扫描其中所有用户可见字符串翻译
 4. **大规模重构冲突**（上游把整个文件结构改了）→ 停下来问用户
 
-操作：
+`package.json` 的版本冲突：保留 fork 的 `name` / `description`，只取上游的 `version`。
+`README.md` 冲突：fork 的 README 是全中文自定义结构，一律保留 fork 侧
+（`git checkout --ours README.md`），版本相关信息在步骤 6 手动更新。
 
-```bash
-jj resolve <change-id>   # 调 mergetool
-# 或者直接编辑文件，jj 自动 snapshot
-jj diff                   # 看当前状态
-```
+解完一个文件 `git add`，继续 `git cherry-pick --continue`（用 `-c core.editor=true`
+跳过编辑器）。cherry-pick 干净落地后，再去翻译那些「无冲突但是上游新增的英文」。
 
 ### 步骤 4：包名一致化扫描
 
@@ -130,7 +138,7 @@ grep -rn --include="*.ts" --include="*.tsx" --include="*.json" \
 
 ```bash
 bun install
-bun tsc --noEmit             # typecheck 必须通过
+bun run lint                 # typecheck + eslint，必须通过
 env -u HTTPS_PROXY -u HTTP_PROXY -u ALL_PROXY \
     -u https_proxy -u http_proxy -u all_proxy \
     bun test                 # 期望全绿
@@ -155,8 +163,7 @@ env -u HTTPS_PROXY -u HTTP_PROXY -u ALL_PROXY \
 ### 步骤 7：push + 开 PR
 
 ```bash
-jj git push --bookmark sync/upstream-$(date +%Y-%m-%d) --allow-new
-gh repo set-default huangguang1999/ccstatusline-zh  # 第一次需要
+git push -u origin sync/upstream-$(date +%Y-%m-%d)
 gh pr create --base main \
   --head "sync/upstream-$(date +%Y-%m-%d)" \
   --title "feat: 同步上游 ccstatusline $ARGUMENTS 并完成中文化" \
@@ -170,7 +177,7 @@ PR body 模板（写到 `/tmp/sync-pr-body.md`）：
 - 同步上游 sirmalloc/ccstatusline 至 `$ARGUMENTS`
 - 中文化新增内容（具体列项）
 - 包名同步（如有）
-- bun tsc / bun test 全绿
+- bun run lint / bun test 全绿
 
 ## 上游新增功能
 （按 release notes 摘 3-5 条 highlight，每条一句中文）
@@ -179,7 +186,7 @@ PR body 模板（写到 `/tmp/sync-pr-body.md`）：
 （具体翻了哪些组件/菜单/widget，按 widget/TUI/error 分组）
 
 ## Test plan
-- [x] bun tsc --noEmit 通过
+- [x] bun run lint 通过
 - [x] bun test 全绿（X 个测试）
 - [ ] 真机 TUI 验证（merge 后用户跑）
 - [ ] settings.json 兼容性
@@ -187,29 +194,25 @@ PR body 模板（写到 `/tmp/sync-pr-body.md`）：
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
-### 步骤 8：等 CI + 提示用户
+CI 自动同步场景（`upstream-sync.yml` 调用）：开完 PR 直接
+`gh pr merge --auto --squash` 开启自动合并，CI 绿后自动合，发布交给 `release.yml`。
 
-```bash
-gh pr checks <PR#> --watch
-```
+### 步骤 8：交接
 
-CI 全绿后**停下来**，把 PR URL 输出给用户，提示：
+PR 开好后：
 
-> PR #XX 已开，CI 全绿。下一步由你 review + merge：
-> ```bash
-> gh pr merge XX --squash
-> git checkout main && git pull
-> bun run build
-> npm publish --registry=https://registry.npmjs.org --tag latest
-> git tag $ARGUMENTS && git push origin $ARGUMENTS
-> gh release create $ARGUMENTS --title "$ARGUMENTS — 同步上游 ..." --generate-notes
-> # 最后关掉 sync issue
-> ```
+- **CI 自动同步**（`upstream-sync.yml`）：已 `gh pr merge --auto --squash`，到此为止。
+  CI 绿 → 自动合并 → `release.yml` 检测到版本号变化 → 在 `npm-publish`
+  Environment 暂停等用户审批 → 批准后发布。
+- **手动跑**：`gh pr checks <PR#> --watch` 看 CI，绿后把 PR URL 给用户，
+  由用户 review + `gh pr merge --squash`。合并后发布同样交给 `release.yml`。
 
 ## 注意事项
 
-- 用 jj 而非 git merge —— colocate 模式下 `jj rebase` 失败可以 `jj op revert` 回滚
-- **不要自动 merge PR，不要 npm publish** —— 这两步硬性留给用户
+- **用 git cherry-pick 取增量，不要 jj rebase / git rebase** —— 见步骤 1 上方说明
+- **不要自己 merge PR，不要手动 npm publish** —— 合并交给 auto-merge + CI，
+  发布交给 `release.yml`（含人工审批 gate）
 - 遇到不知道怎么翻译的术语 → 查 fork 已有翻译先（`grep -rn '关键词' src/`）
-- 遇到上游大规模重构 → 停下来描述 diff 摘要给用户决策
+- 遇到上游大规模重构 → 停下来：手动场景问用户，CI 场景开 issue 通知后停止
 - lint 错误不要用 `eslint-disable` 注释绕过 —— 项目 CLAUDE.md 硬约束，改源码
+- typecheck + lint 统一跑 `bun run lint`，不要直接 `bun tsc` / `npx eslint`
